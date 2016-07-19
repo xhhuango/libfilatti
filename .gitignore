@@ -1,0 +1,11 @@
+# Generated files
+build/
+
+*.iml
+.idea/
+
+*.swp
+
+.DS_Store
+.Trashes
+
