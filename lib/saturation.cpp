@@ -4,7 +4,8 @@
 
 using namespace filatti;
 
-Saturation::Saturation() : _saturation{0} {
+Saturation::Saturation() {
+    _saturation = SATURATION_NONE;
 }
 
 Saturation::~Saturation() {

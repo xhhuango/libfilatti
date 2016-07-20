@@ -17,13 +17,9 @@ namespace filatti {
         const double SATURATION_MAX = 1;
 
         Saturation();
-
         ~Saturation();
-
         double get_saturation();
-
         bool set_saturation(double saturation);
-
         bool apply(cv::Mat& src, cv::Mat& dst);
     };
 };

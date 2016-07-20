@@ -5,6 +5,8 @@ include_directories(../include)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../build/)
 
-set(SOURCE_FILES saturation_test.cpp)
-add_executable(saturation_test ${SOURCE_FILES})
+add_executable(saturation_test saturation_test.cpp)
 target_link_libraries(saturation_test filatti)
+
+add_executable(sharpen_test sharpen_test.cpp)
+target_link_libraries(sharpen_test filatti)

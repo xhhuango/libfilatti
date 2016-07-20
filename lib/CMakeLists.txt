@@ -3,5 +3,5 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L/usr/local/opt/opencv3/lib -I/usr/loca
 
 include_directories(../include)
 
-set(SOURCE_FILES saturation.cpp)
+set(SOURCE_FILES saturation.cpp sharpen.cpp)
 add_library(filatti ${SOURCE_FILES})
