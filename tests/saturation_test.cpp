@@ -9,14 +9,14 @@
 #define TRACKBAR_NAME "Saturation"
 
 cv::Mat src;
-filatti::Saturation sharpen;
+filatti::Saturation brightness;
 int trackbar_value = 100;
 
 void on_trackbar(int, void*) {
-    sharpen.set_saturation((trackbar_value - 100) / 100.0);
+    brightness.set_saturation((trackbar_value - 100) / 100.0);
 
     cv::Mat tmp(src.size(), src.type());
-    if (!sharpen.apply(src, tmp))
+    if (!brightness.apply(src, tmp))
         tmp = src;
     cv::imshow(WINDOW_NAME, tmp);
 }

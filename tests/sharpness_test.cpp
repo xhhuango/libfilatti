@@ -1,22 +1,22 @@
 #include <iostream>
 
 #include <opencv2/opencv.hpp>
-#include <filatti/sharpen.hpp>
+#include <filatti/sharpness.hpp>
 
 #include "test.hpp"
 
-#define WINDOW_NAME "Sharpen Adjustment"
-#define TRACKBAR_NAME "Sharpen"
+#define WINDOW_NAME "Sharpness Adjustment"
+#define TRACKBAR_NAME "Sharpness"
 
 cv::Mat src;
-filatti::Sharpen sharpen;
+filatti::Sharpness brightness;
 int trackbar_value = 0;
 
 void on_trackbar(int, void*) {
-    sharpen.set_sharpen(trackbar_value / 100.0);
+    brightness.set_sharpness(trackbar_value / 100.0);
 
     cv::Mat tmp(src.size(), src.type());
-    if (!sharpen.apply(src, tmp))
+    if (!brightness.apply(src, tmp))
         tmp = src;
     cv::imshow(WINDOW_NAME, tmp);
 }

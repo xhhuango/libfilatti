@@ -29,16 +29,16 @@ bool Saturation::apply(cv::Mat &src, cv::Mat &dst) {
         return false;
     } else {
         cv::Mat hsv;
-        cvtColor(src, hsv, cv::COLOR_BGR2HSV);
+        cv::cvtColor(src, hsv, cv::COLOR_BGR2HSV);
 
         std::vector<cv::Mat> channels(3);
-        split(hsv, channels);
+        cv::split(hsv, channels);
 
-        LUT(channels[1], _lut, channels[1]);
+        cv::LUT(channels[1], _lut, channels[1]);
 
-        merge(channels, hsv);
+        cv::merge(channels, hsv);
 
-        cvtColor(hsv, dst, cv::COLOR_HSV2BGR);
+        cv::cvtColor(hsv, dst, cv::COLOR_HSV2BGR);
         return true;
     }
 }

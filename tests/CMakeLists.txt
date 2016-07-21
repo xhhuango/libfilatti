@@ -8,5 +8,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../build/)
 add_executable(saturation_test saturation_test.cpp)
 target_link_libraries(saturation_test filatti)
 
-add_executable(sharpen_test sharpen_test.cpp)
-target_link_libraries(sharpen_test filatti)
+add_executable(sharpness_test sharpness_test.cpp)
+target_link_libraries(sharpness_test filatti)
+
+add_executable(brightness_test brightness_test.cpp)
+target_link_libraries(brightness_test filatti)
