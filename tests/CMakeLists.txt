@@ -13,3 +13,6 @@ target_link_libraries(sharpness_test filatti)
 
 add_executable(brightness_test brightness_test.cpp)
 target_link_libraries(brightness_test filatti)
+
+add_executable(contrast_test contrast_test.cpp)
+target_link_libraries(contrast_test filatti)

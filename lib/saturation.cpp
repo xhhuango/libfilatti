@@ -16,7 +16,7 @@ double Saturation::get_saturation() {
 }
 
 bool Saturation::set_saturation(double saturation) {
-    if (_saturation < SATURATION_MIN || _saturation > SATURATION_MAX)
+    if (!within(saturation, SATURATION_MIN, SATURATION_MAX))
         return false;
 
     _saturation = saturation;

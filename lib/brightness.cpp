@@ -16,7 +16,7 @@ double Brightness::get_brightness() {
 }
 
 bool Brightness::set_brightness(double brightness) {
-    if (_brightness < BRIGHTNESS_MIN || _brightness > BRIGHTNESS_MAX)
+    if (!within(brightness, BRIGHTNESS_MIN, BRIGHTNESS_MAX))
         return false;
 
     _brightness = brightness;

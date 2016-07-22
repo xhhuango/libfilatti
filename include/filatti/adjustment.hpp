@@ -4,6 +4,10 @@
 #include <opencv2/core.hpp>
 
 namespace filatti {
+    template<typename T> static inline bool within(T value, T min, T max) {
+        return value >= min && value <= max;
+    }
+
     class Adjustment {
     public:
         virtual bool apply(cv::Mat& src, cv::Mat& dst) = 0;

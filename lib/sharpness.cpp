@@ -16,7 +16,7 @@ double Sharpness::get_sharpness() {
 }
 
 bool Sharpness::set_sharpness(double sharpness) {
-    if (sharpness < SHARPNESS_MIN || sharpness > SHARPNESS_MAX)
+    if (!within(sharpness, SHARPNESS_MIN, SHARPNESS_MAX))
         return false;
 
     _sharpness = sharpness;
