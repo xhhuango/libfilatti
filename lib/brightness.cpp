@@ -24,19 +24,20 @@ bool Brightness::set_brightness(double brightness) {
     return true;
 }
 
-bool Brightness::apply(cv::Mat &src, cv::Mat &dst) {
+bool Brightness::apply(cv::Mat& src, cv::Mat& dst) {
     if (_brightness == BRIGHTNESS_NONE) {
         return false;
     } else {
         cv::Mat hls;
         cv::cvtColor(src, hls, cv::COLOR_BGR2HLS);
 
-        std::vector<cv::Mat> channels(3);
-        cv::split(hls, channels);
+        cv::Mat l;
+        cv::extractChannel(hls, l, 1);
 
-        cv::LUT(channels[1], _lut, channels[1]);
+        cv::LUT(l, _lut, l);
 
-        cv::merge(channels, hls);
+        std::vector<int> from_to{0, 1};
+        cv::mixChannels(l, hls, from_to);
 
         cv::cvtColor(hls, dst, cv::COLOR_HLS2BGR);
         return true;
@@ -53,7 +54,7 @@ void Brightness::build_lut() {
     if (_lut.empty())
         _lut.create(256, 1, CV_8UC1);
 
-    uchar *p = _lut.data;
+    uchar* p = _lut.data;
     for (int i = 0; i < 256; ++i)
         p[i] = cv::saturate_cast<uchar>(i + (i * _brightness));
 }

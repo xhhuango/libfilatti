@@ -1,5 +1,4 @@
 #include <iostream>
-#include <chrono>
 
 #include <opencv2/opencv.hpp>
 #include <filatti/brightness.hpp>
@@ -17,12 +16,12 @@ void on_trackbar(int, void*) {
     brightness.set_brightness((trackbar_value - 100) / 100.0);
 
     cv::Mat tmp(src.size(), src.type());
-
-    std::chrono::milliseconds from_ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
+    auto before = get_current_milliseconds();
     if (!brightness.apply(src, tmp))
         tmp = src;
-    std::chrono::milliseconds to_ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
-    std::cout << "Spent: " << (to_ms - from_ms).count() << std::endl;
+    auto after = get_current_milliseconds();
+
+    std::cout << "Spent: " << (after - before).count() << " ms" << std::endl;
 
     cv::imshow(WINDOW_NAME, tmp);
 }

@@ -16,8 +16,12 @@ void on_trackbar(int, void*) {
     brightness.set_saturation((trackbar_value - 100) / 100.0);
 
     cv::Mat tmp(src.size(), src.type());
+    auto before = get_current_milliseconds();
     if (!brightness.apply(src, tmp))
         tmp = src;
+    auto after = get_current_milliseconds();
+    std::cout << "Spent: " << (after - before).count() << " ms" << std::endl;
+
     cv::imshow(WINDOW_NAME, tmp);
 }
 

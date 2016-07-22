@@ -15,19 +15,19 @@ double Sharpness::get_sharpness() {
     return _sharpness;
 }
 
-bool Sharpness::set_sharpness(double sharpenss) {
-    if (sharpenss < SHARPNESS_MIN || sharpenss > SHARPNESS_MAX)
+bool Sharpness::set_sharpness(double sharpness) {
+    if (sharpness < SHARPNESS_MIN || sharpness > SHARPNESS_MAX)
         return false;
 
-    _sharpness = sharpenss;
+    _sharpness = sharpness;
 
-    if (sharpenss == SHARPNESS_NONE && !_blurred.empty())
+    if (sharpness == SHARPNESS_NONE && !_blurred.empty())
         _blurred.release();
 
     return true;
 }
 
-bool Sharpness::apply(cv::Mat &src, cv::Mat &dst) {
+bool Sharpness::apply(cv::Mat& src, cv::Mat& dst) {
     if (_sharpness == SHARPNESS_NONE) {
         return false;
     } else {
@@ -38,7 +38,7 @@ bool Sharpness::apply(cv::Mat &src, cv::Mat &dst) {
     }
 }
 
-void Sharpness::build_blurred(cv::Mat &src) {
+void Sharpness::build_blurred(cv::Mat& src) {
     cv::Size size(0, 0);
     cv::GaussianBlur(src, _blurred, size, 3);
 }

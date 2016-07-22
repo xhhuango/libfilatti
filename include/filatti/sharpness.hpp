@@ -1,10 +1,10 @@
 #ifndef __FILATTI_SHARPNESS_HPP__
 #define __FILATTI_SHARPNESS_HPP__
 
-#include <opencv2/core.hpp>
+#include "adjustment.hpp"
 
 namespace filatti {
-    class Sharpness {
+    class Sharpness : public Adjustment {
     private:
         double _sharpness;
         cv::Mat _blurred;
@@ -17,10 +17,14 @@ namespace filatti {
         const double SHARPNESS_MAX = 1;
 
         Sharpness();
+
         ~Sharpness();
+
         double get_sharpness();
-        bool set_sharpness(double sharpenss);
-        bool apply(cv::Mat& src, cv::Mat& dst);
+
+        bool set_sharpness(double sharpness);
+
+        virtual bool apply(cv::Mat& src, cv::Mat& dst) override;
     };
 }
 

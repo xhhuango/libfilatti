@@ -1,10 +1,10 @@
 #ifndef __FILATTI_SATURATION_HPP__
 #define __FILATTI_SATURATION_HPP__
 
-#include <opencv2/core.hpp>
+#include "adjustment.hpp"
 
 namespace filatti {
-    class Saturation {
+    class Saturation : public Adjustment {
     private:
         double _saturation;
         cv::Mat _lut;
@@ -17,10 +17,14 @@ namespace filatti {
         const double SATURATION_MAX = 1;
 
         Saturation();
+
         ~Saturation();
+
         double get_saturation();
+
         bool set_saturation(double saturation);
-        bool apply(cv::Mat& src, cv::Mat& dst);
+
+        virtual bool apply(cv::Mat& src, cv::Mat& dst) override;
     };
 };
 
