@@ -15,14 +15,14 @@ int trackbar_value = 100;
 void on_trackbar(int, void*) {
     contrast.set_contrast(trackbar_value / 100.0);
 
-    cv::Mat tmp(src.size(), src.type());
+    cv::Mat dst;
     auto before = get_current_milliseconds();
-    if (!contrast.apply(src, tmp))
-        tmp = src;
+    if (!contrast.apply(src, dst))
+        dst = src;
     auto after = get_current_milliseconds();
     std::cout << "Spent: " << (after - before).count() << " ms" << std::endl;
 
-    cv::imshow(WINDOW_NAME, tmp);
+    cv::imshow(WINDOW_NAME, dst);
 }
 
 int main() {

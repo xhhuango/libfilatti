@@ -6,31 +6,43 @@
 #include "test.hpp"
 
 #define WINDOW_NAME "Vignette Adjustment"
-#define TRACKBAR_NAME "Vignette"
+#define RADIUS_TRACKBAR_NAME "Radius"
+#define STRENGTH_TRACKBAR_NAME "Strength"
+#define FEATHERING_TRACKBAR_NAME "Feathering"
 
 cv::Mat src;
 filatti::Vignette vignette;
-int trackbar_value = 100;
+int radius_trackbar_value = 65;
+int feathering_trackbar_value = 35;
+int strength_trackbar_value = 75;
 
 void on_trackbar(int, void*) {
-//    vignette.set_brightness((trackbar_value - 100) / 100.0);
+    vignette.set_radius(radius_trackbar_value / 100.0);
+    vignette.set_feathering(feathering_trackbar_value / 100.0);
+    vignette.set_strength(strength_trackbar_value / 100.0);
 
-    cv::Mat tmp(src.size(), CV_64FC1);
+    std::cout << "Radius=" << radius_trackbar_value
+    << ", Feathering=" << feathering_trackbar_value
+    << ", Strength=" << strength_trackbar_value << std::endl;
+
+    cv::Mat dst;
     auto before = get_current_milliseconds();
-    vignette.apply(src, tmp);
+    vignette.apply(src, dst);
     auto after = get_current_milliseconds();
 
     std::cout << "Spent: " << (after - before).count() << " ms" << std::endl;
 
-    cv::imshow(WINDOW_NAME, tmp);
+    cv::imshow(WINDOW_NAME, dst);
 }
 
 int main() {
     src = cv::imread(IMAGE_FILE_1);
 
     cv::namedWindow(WINDOW_NAME, cv::WINDOW_NORMAL);
-    cv::createTrackbar(TRACKBAR_NAME, WINDOW_NAME, &trackbar_value, 200, on_trackbar);
-    on_trackbar(trackbar_value, nullptr);
+    cv::createTrackbar(RADIUS_TRACKBAR_NAME, WINDOW_NAME, &radius_trackbar_value, 100, on_trackbar);
+    cv::createTrackbar(FEATHERING_TRACKBAR_NAME, WINDOW_NAME, &feathering_trackbar_value, 100, on_trackbar);
+    cv::createTrackbar(STRENGTH_TRACKBAR_NAME, WINDOW_NAME, &strength_trackbar_value, 100, on_trackbar);
+    on_trackbar(0, nullptr);
 
     cv::waitKey(0);
     return 0;
