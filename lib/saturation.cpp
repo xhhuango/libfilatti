@@ -36,8 +36,7 @@ bool Saturation::apply(cv::Mat& src, cv::Mat& dst) {
 
         cv::LUT(s, _lut, s);
 
-        std::vector<int> from_to{0, 1};
-        cv::mixChannels(s, hsv, from_to);
+        cv::mixChannels(s, hsv, std::vector<int>{0, 1});
 
         cv::cvtColor(hsv, dst, cv::COLOR_HSV2BGR);
         return true;

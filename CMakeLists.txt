@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.0)
 project(libfilatti
         VERSION 1.0.0
         LANGUAGES CXX)

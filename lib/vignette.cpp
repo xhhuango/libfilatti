@@ -55,10 +55,6 @@ bool Vignette::set_strength(double strength) {
         return false;
 
     _strength = strength;
-
-    if (!_vignette.empty())
-        _vignette.release();
-
     return true;
 }
 
@@ -130,23 +126,21 @@ void Vignette::build_vignette(cv::Mat& src) {
             if (_fit_to_image) {
                 double radius_max = radius_height_pow2 - ((radius_height_pow2 * x_pow2) / radius_width_pow2);
                 if (y_pow2 > radius_max) {
-                    blend = _strength;
+                    blend = 1;
                 } else {
                     radius_min = radius_max - feathering;
                     if (y_pow2 >= radius_min) {
                         blend = (y_pow2 - radius_min) / feathering;
-                        blend *= _strength;
                     } else {
                         blend = 0;
                     }
                 }
             } else {
                 if (x_pow2 + y_pow2 > radius_circular) {
-                    blend = _strength;
+                    blend = 1;
                 } else {
                     if (x_pow2 + y_pow2 > radius_min) {
                         blend = (x_pow2 + y_pow2 - radius_min) / feathering;
-                        blend *= _strength;
                     } else {
                         blend = 0;
                     }
@@ -159,11 +153,8 @@ void Vignette::build_vignette(cv::Mat& src) {
 }
 
 void Vignette::blend_vignette(cv::Mat& src, cv::Mat& dst) {
-    std::vector<cv::Mat> vignette_strength_vector;
-    cv::Mat vignette_strength;
-    for (int i = 0, j = src.channels(); i < j; ++i)
-        vignette_strength_vector.push_back(_vignette);
-    cv::merge(vignette_strength_vector, vignette_strength);
+    cv::Mat vignette_strength(src.size(), src.type());
+    cv::mixChannels(_vignette * _strength, vignette_strength, std::vector<int>{0, 0, 0, 1, 0, 2});
 
     cv::Mat vignette(src.size(), src.type(), _color);
 

@@ -27,7 +27,8 @@ void on_trackbar(int, void*) {
 
     cv::Mat dst;
     auto before = get_current_milliseconds();
-    vignette.apply(src, dst);
+    if (!vignette.apply(src, dst))
+        dst = src;
     auto after = get_current_milliseconds();
 
     std::cout << "Spent: " << (after - before).count() << " ms" << std::endl;
