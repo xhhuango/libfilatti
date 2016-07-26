@@ -74,7 +74,7 @@ bool Vignette::set_feathering(double feathering) {
     return true;
 }
 
-cv::Scalar Vignette::get_color() {
+cv::Scalar_<uchar> Vignette::get_color() {
     return _color;
 }
 

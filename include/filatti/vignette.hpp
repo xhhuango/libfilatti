@@ -53,7 +53,7 @@ namespace filatti {
 
         bool set_feathering(double feathering);
 
-        cv::Scalar get_color();
+        cv::Scalar_<uchar> get_color();
 
         bool set_color(cv::Scalar_<uchar> color);
 
