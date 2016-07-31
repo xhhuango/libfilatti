@@ -19,3 +19,6 @@ target_link_libraries(contrast_test filatti)
 
 add_executable(vignette_test vignette_test.cpp)
 target_link_libraries(vignette_test filatti)
+
+add_executable(temperature_test temperature_test.cpp)
+target_link_libraries(temperature_test filatti)

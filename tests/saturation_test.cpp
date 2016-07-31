@@ -9,15 +9,15 @@
 #define TRACKBAR_NAME "Saturation"
 
 cv::Mat src;
-filatti::Saturation brightness;
-int trackbar_value = 100;
+filatti::Saturation saturation;
+int trackbar_value = (int) (saturation.get_saturation() * 100) + 100;
 
 void on_trackbar(int, void*) {
-    brightness.set_saturation((trackbar_value - 100) / 100.0);
+    saturation.set_saturation((trackbar_value - 100) / 100.0);
 
     cv::Mat dst;
     auto before = get_current_milliseconds();
-    if (!brightness.apply(src, dst))
+    if (!saturation.apply(src, dst))
         dst = src;
     auto after = get_current_milliseconds();
     std::cout << "Spent: " << (after - before).count() << " ms" << std::endl;

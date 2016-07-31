@@ -30,6 +30,7 @@ namespace filatti {
         const double STRENGTH_MIN = 0;
         const double STRENGTH_MAX = 1;
 
+        const double FEATHERING_NONE = 0;
         const double FEATHERING_MIN = 0;
         const double FEATHERING_MAX = 1;
 
@@ -56,6 +57,10 @@ namespace filatti {
         cv::Scalar_<uchar> get_color();
 
         bool set_color(cv::Scalar_<uchar> color);
+
+        bool is_fit_to_image();
+
+        void set_fit_to_image(bool fit_to_image);
 
         virtual bool apply(cv::Mat& src, cv::Mat& dst) override;
     };

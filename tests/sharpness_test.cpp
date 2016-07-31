@@ -9,15 +9,15 @@
 #define TRACKBAR_NAME "Sharpness"
 
 cv::Mat src;
-filatti::Sharpness brightness;
-int trackbar_value = 0;
+filatti::Sharpness sharpness;
+int trackbar_value = (int) (sharpness.get_sharpness() * 100);
 
 void on_trackbar(int, void*) {
-    brightness.set_sharpness(trackbar_value / 100.0);
+    sharpness.set_sharpness(trackbar_value / 100.0);
 
     cv::Mat dst;
     auto before = get_current_milliseconds();
-    if (!brightness.apply(src, dst))
+    if (!sharpness.apply(src, dst))
         dst = src;
     auto after = get_current_milliseconds();
     std::cout << "Spent: " << (after - before).count() << " ms" << std::endl;

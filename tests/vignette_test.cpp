@@ -12,9 +12,9 @@
 
 cv::Mat src;
 filatti::Vignette vignette;
-int radius_trackbar_value = 65;
-int feathering_trackbar_value = 35;
-int strength_trackbar_value = 75;
+int radius_trackbar_value = (int) (vignette.get_radius() * 100);
+int feathering_trackbar_value = (int) (vignette.get_feathering() * 100);
+int strength_trackbar_value = (int) (vignette.get_strength() * 100);
 
 void on_trackbar(int, void*) {
     vignette.set_radius(radius_trackbar_value / 100.0);

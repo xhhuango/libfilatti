@@ -10,7 +10,7 @@
 
 cv::Mat src;
 filatti::Brightness brightness;
-int trackbar_value = 100;
+int trackbar_value = (int) (brightness.get_brightness() * 100) + 100;
 
 void on_trackbar(int, void*) {
     brightness.set_brightness((trackbar_value - 100) / 100.0);

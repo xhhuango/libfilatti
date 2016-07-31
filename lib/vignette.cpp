@@ -5,14 +5,15 @@ using namespace filatti;
 
 Vignette::Vignette()
         : _center{0.5, 0.5},
-          _radius(1),
-          _strength(0.8),
-          _feathering(0.3),
           _color{0, 0, 0},
           _fit_to_image(true) {
+    _radius = RADIUS_NONE;
+    _strength = STRENGTH_NONE;
+    _feathering = FEATHERING_NONE;
 }
 
-Vignette::~Vignette() { }
+Vignette::~Vignette() {
+}
 
 std::vector<double> Vignette::get_center() {
     return _center;
@@ -83,6 +84,14 @@ bool Vignette::set_color(cv::Scalar_<uchar> color) {
     return true;
 }
 
+bool Vignette::is_fit_to_image() {
+    return _fit_to_image;
+}
+
+void Vignette::set_fit_to_image(bool fit_to_image) {
+    _fit_to_image = fit_to_image;
+}
+
 bool Vignette::apply(cv::Mat& src, cv::Mat& dst) {
     if (_strength == STRENGTH_NONE || _radius == RADIUS_NONE) {
         return false;
@@ -114,8 +123,8 @@ void Vignette::build_vignette(cv::Mat& src) {
     double radius_circular = (radius_width < radius_height) ? radius_width_pow2 : radius_height_pow2;
     double radius_min = radius_circular - feathering;
 
-    for (int col = 0; col < width; ++col) {
-        for (int row = 0; row < height; ++row) {
+    for (int row = 0; row < height; ++row) {
+        for (int col = 0; col < width; ++col) {
             double x = col - center_x;
             double y = row - center_y;
             double x_pow2 = x * x;
