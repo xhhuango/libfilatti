@@ -1,7 +1,7 @@
 #ifndef __FILATTI_SHARPNESS_HPP__
 #define __FILATTI_SHARPNESS_HPP__
 
-#include "adjustment.hpp"
+#include <filatti/adjustment.hpp>
 
 namespace filatti {
     class Sharpness : public Adjustment {
@@ -9,7 +9,7 @@ namespace filatti {
         double _sharpness;
         cv::Mat _blurred;
 
-        void build_blurred(cv::Mat& src);
+        void build_blurred(const cv::Mat& src);
 
     public:
         const double SHARPNESS_NONE = 0;
@@ -24,7 +24,7 @@ namespace filatti {
 
         bool set_sharpness(double sharpness);
 
-        virtual bool apply(cv::Mat& src, cv::Mat& dst) override;
+        virtual bool apply(const cv::Mat& src, cv::Mat& dst) override;
     };
 }
 

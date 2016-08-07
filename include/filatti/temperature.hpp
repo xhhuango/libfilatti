@@ -1,7 +1,7 @@
 #ifndef __FILATTI_TEMPERATURE_HPP__
 #define __FILATTI_TEMPERATURE_HPP__
 
-#include "adjustment.hpp"
+#include <filatti/adjustment.hpp>
 
 namespace filatti {
     class Temperature : public Adjustment {
@@ -18,7 +18,7 @@ namespace filatti {
 
         uchar kelvin_to_r(unsigned int kelvin);
 
-        void build_lut(cv::Vec3b color);
+        void build_lut(const cv::Vec3b& color);
 
     public:
         const unsigned int KELVIN_NONE = 6600;
@@ -41,7 +41,7 @@ namespace filatti {
 
         bool set_strength(double strength);
 
-        virtual bool apply(cv::Mat& src, cv::Mat& dst) override;
+        virtual bool apply(const cv::Mat& src, cv::Mat& dst) override;
     };
 }
 

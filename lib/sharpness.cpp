@@ -27,7 +27,7 @@ bool Sharpness::set_sharpness(double sharpness) {
     return true;
 }
 
-bool Sharpness::apply(cv::Mat& src, cv::Mat& dst) {
+bool Sharpness::apply(const cv::Mat& src, cv::Mat& dst) {
     if (_sharpness == SHARPNESS_NONE) {
         return false;
     } else {
@@ -38,7 +38,6 @@ bool Sharpness::apply(cv::Mat& src, cv::Mat& dst) {
     }
 }
 
-void Sharpness::build_blurred(cv::Mat& src) {
-    cv::Size size(0, 0);
-    cv::GaussianBlur(src, _blurred, size, 3);
+void Sharpness::build_blurred(const cv::Mat& src) {
+    cv::GaussianBlur(src, _blurred, cv::Size(0, 0), 3);
 }

@@ -10,7 +10,7 @@ namespace filatti {
 
     class Adjustment {
     public:
-        virtual bool apply(cv::Mat& src, cv::Mat& dst) = 0;
+        virtual bool apply(const cv::Mat& src, cv::Mat& dst) = 0;
     };
 }
 

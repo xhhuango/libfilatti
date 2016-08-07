@@ -22,3 +22,6 @@ target_link_libraries(vignette_test filatti)
 
 add_executable(temperature_test temperature_test.cpp)
 target_link_libraries(temperature_test filatti)
+
+add_executable(curves_test curves_test.cpp)
+target_link_libraries(curves_test filatti)

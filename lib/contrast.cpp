@@ -22,7 +22,7 @@ bool Contrast::set_contrast(double contrast) {
     return true;
 }
 
-bool Contrast::apply(cv::Mat& src, cv::Mat& dst) {
+bool Contrast::apply(const cv::Mat& src, cv::Mat& dst) {
     if (_contrast == CONTRAST_NONE) {
         return false;
     } else {

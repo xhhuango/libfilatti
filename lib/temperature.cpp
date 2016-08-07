@@ -44,7 +44,7 @@ bool Temperature::set_strength(double strength) {
     return true;
 }
 
-bool Temperature::apply(cv::Mat& src, cv::Mat& dst) {
+bool Temperature::apply(const cv::Mat& src, cv::Mat& dst) {
     if (_strength == STRENGTH_NONE || _kelvin == KELVIN_NONE) {
         return false;
     } else {
@@ -109,7 +109,7 @@ uchar Temperature::kelvin_to_r(unsigned int kelvin) {
     }
 }
 
-void Temperature::build_lut(cv::Vec3b color) {
+void Temperature::build_lut(const cv::Vec3b& color) {
     _lut.create(256, 1, CV_8UC3);
 
     double kelvin_blue = color[0] * _strength;

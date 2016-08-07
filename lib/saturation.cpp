@@ -24,7 +24,7 @@ bool Saturation::set_saturation(double saturation) {
     return true;
 }
 
-bool Saturation::apply(cv::Mat& src, cv::Mat& dst) {
+bool Saturation::apply(const cv::Mat& src, cv::Mat& dst) {
     if (_saturation == SATURATION_NONE) {
         return false;
     } else {

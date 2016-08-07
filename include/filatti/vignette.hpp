@@ -1,7 +1,7 @@
 #ifndef __FILATTI_VIGNETTE_HPP__
 #define __FILATTI_VIGNETTE_HPP__
 
-#include "adjustment.hpp"
+#include <filatti/adjustment.hpp>
 
 namespace filatti {
     class Vignette : public Adjustment {
@@ -15,8 +15,8 @@ namespace filatti {
 
         cv::Mat _vignette;
 
-        void build_vignette(cv::Mat& src);
-        void blend_vignette(cv::Mat& src, cv::Mat& dst);
+        void build_vignette(const cv::Mat& src);
+        void blend_vignette(const cv::Mat& src, cv::Mat& dst);
 
     public:
         const double CENTER_MIN = 0;
@@ -62,7 +62,7 @@ namespace filatti {
 
         void set_fit_to_image(bool fit_to_image);
 
-        virtual bool apply(cv::Mat& src, cv::Mat& dst) override;
+        virtual bool apply(const cv::Mat& src, cv::Mat& dst) override;
     };
 }
 

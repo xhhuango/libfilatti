@@ -24,7 +24,7 @@ bool Brightness::set_brightness(double brightness) {
     return true;
 }
 
-bool Brightness::apply(cv::Mat& src, cv::Mat& dst) {
+bool Brightness::apply(const cv::Mat& src, cv::Mat& dst) {
     if (_brightness == BRIGHTNESS_NONE) {
         return false;
     } else {

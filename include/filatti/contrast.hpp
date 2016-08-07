@@ -1,7 +1,7 @@
 #ifndef __FILATTI_CONTRAST_HPP__
 #define __FILATTI_CONTRAST_HPP__
 
-#include "adjustment.hpp"
+#include <filatti/adjustment.hpp>
 
 namespace filatti {
     class Contrast : public Adjustment {
@@ -24,7 +24,7 @@ namespace filatti {
 
         bool set_contrast(double contrast);
 
-        virtual bool apply(cv::Mat& src, cv::Mat& dst) override;
+        virtual bool apply(const cv::Mat& src, cv::Mat& dst) override;
     };
 }
 

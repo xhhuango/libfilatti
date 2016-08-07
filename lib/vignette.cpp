@@ -92,7 +92,7 @@ void Vignette::set_fit_to_image(bool fit_to_image) {
     _fit_to_image = fit_to_image;
 }
 
-bool Vignette::apply(cv::Mat& src, cv::Mat& dst) {
+bool Vignette::apply(const cv::Mat& src, cv::Mat& dst) {
     if (_strength == STRENGTH_NONE || _radius == RADIUS_NONE) {
         return false;
     } else {
@@ -103,7 +103,7 @@ bool Vignette::apply(cv::Mat& src, cv::Mat& dst) {
     }
 }
 
-void Vignette::build_vignette(cv::Mat& src) {
+void Vignette::build_vignette(const cv::Mat& src) {
     _vignette.create(src.size(), CV_8UC1);
     int width = _vignette.cols;
     int height = _vignette.rows;
@@ -161,7 +161,7 @@ void Vignette::build_vignette(cv::Mat& src) {
     }
 }
 
-void Vignette::blend_vignette(cv::Mat& src, cv::Mat& dst) {
+void Vignette::blend_vignette(const cv::Mat& src, cv::Mat& dst) {
     cv::Mat vignette_strength(src.size(), src.type());
     cv::mixChannels(_vignette * _strength, vignette_strength, std::vector<int>{0, 0, 0, 1, 0, 2});
 

@@ -1,7 +1,9 @@
 #ifndef __FILATTI_TEST_HPP__
 #define __FILATTI_TEST_HPP__
 
-const char IMAGE_FILE_1[] = "../tests/test1.jpg";
+#include <string>
+std::string IMAGE_FILE_1("../tests/test1.jpg");
+std::string IMAGE_FILE_2("../tests/test2.jpg");
 
 #include <chrono>
 inline std::chrono::milliseconds get_current_milliseconds() {
