@@ -10,7 +10,7 @@ set(SOURCE_FILES
         contrast.cpp
         vignette.cpp
         temperature.cpp
-        curves.cpp
+        curves.cpp interpolator/spline.cpp interpolator/linear.cpp
         )
 
 add_library(filatti ${SOURCE_FILES})

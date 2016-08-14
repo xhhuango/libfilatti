@@ -1,6 +1,7 @@
 #include <filatti/curves.hpp>
 
-#include "spline.hpp"
+#include "interpolator/spline.hpp"
+#include "interpolator/linear.hpp"
 
 using namespace filatti;
 
@@ -22,8 +23,8 @@ inline bool Curves::check_input_points(const std::vector<uchar>& from, const std
 }
 
 std::vector<uchar> Curves::get_curves(const std::pair<std::vector<uchar>, std::vector<uchar>>& points) {
-    Spline<double, double> spline(std::vector<double>(points.first.begin(), points.first.end()),
-                                  std::vector<double>(points.second.begin(), points.second.end()));
+    Spline spline(std::vector<double>(points.first.begin(), points.first.end()),
+                  std::vector<double>(points.second.begin(), points.second.end()));
     std::vector<uchar> curves(256);
     for (int i = 0; i < 256; ++i)
         curves[i] = cv::saturate_cast<uchar>(spline[i]);
@@ -124,18 +125,47 @@ void Curves::build_lut() {
     if (_lut.empty())
         _lut.create(256, 1, CV_8UC3);
 
-    Spline<double, double> value_spline(std::vector<double>(_value_points.first.begin(), _value_points.first.end()),
+    Interpolator* value_interpolator;
+    if (_value_points.first.size() > 2)
+        value_interpolator = new Spline(std::vector<double>(_value_points.first.begin(), _value_points.first.end()),
                                         std::vector<double>(_value_points.second.begin(), _value_points.second.end()));
-    Spline<double, double> blue_spline(std::vector<double>(_blue_points.first.begin(), _blue_points.first.end()),
+    else
+        value_interpolator = new Linear(std::vector<double>(_value_points.first.begin(), _value_points.first.end()),
+                                        std::vector<double>(_value_points.second.begin(), _value_points.second.end()));
+
+    Interpolator* blue_interpolator;
+    if (_blue_points.first.size() > 2)
+        blue_interpolator = new Spline(std::vector<double>(_blue_points.first.begin(), _blue_points.first.end()),
                                        std::vector<double>(_blue_points.second.begin(), _blue_points.second.end()));
-    Spline<double, double> green_spline(std::vector<double>(_green_points.first.begin(), _green_points.first.end()),
+    else
+        blue_interpolator = new Linear(std::vector<double>(_blue_points.first.begin(), _blue_points.first.end()),
+                                       std::vector<double>(_blue_points.second.begin(), _blue_points.second.end()));
+
+    Interpolator* green_interpolator;
+    if (_green_points.first.size() > 2)
+        green_interpolator = new Spline(std::vector<double>(_green_points.first.begin(), _green_points.first.end()),
                                         std::vector<double>(_green_points.second.begin(), _green_points.second.end()));
-    Spline<double, double> red_spline(std::vector<double>(_red_points.first.begin(), _red_points.first.end()),
+    else
+        green_interpolator = new Linear(std::vector<double>(_green_points.first.begin(), _green_points.first.end()),
+                                        std::vector<double>(_green_points.second.begin(), _green_points.second.end()));
+
+    Interpolator* red_interpolator;
+    if (_red_points.first.size() > 2)
+        red_interpolator = new Spline(std::vector<double>(_red_points.first.begin(), _red_points.first.end()),
                                       std::vector<double>(_red_points.second.begin(), _red_points.second.end()));
+    else
+        red_interpolator = new Linear(std::vector<double>(_red_points.first.begin(), _red_points.first.end()),
+                                      std::vector<double>(_red_points.second.begin(), _red_points.second.end()));
+
     for (int i = 0; i < 256; ++i) {
-        double value = value_spline[i];
-        _lut.at<cv::Vec3b>(i, 0) = cv::Vec3b{cv::saturate_cast<uchar>(blue_spline[value]),
-                                             cv::saturate_cast<uchar>(green_spline[value]),
-                                             cv::saturate_cast<uchar>(red_spline[value])};
+        double value = (*value_interpolator)[i];
+        _lut.at<cv::Vec3b>(i, 0) = cv::Vec3b{cv::saturate_cast<uchar>((*blue_interpolator)[value]),
+                                             cv::saturate_cast<uchar>((*green_interpolator)[value]),
+                                             cv::saturate_cast<uchar>((*red_interpolator)[value])};
     }
+
+    delete value_interpolator;
+    delete blue_interpolator;
+    delete green_interpolator;
+    delete red_interpolator;
 }
