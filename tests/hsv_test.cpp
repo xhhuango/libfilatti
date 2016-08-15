@@ -1,26 +1,26 @@
 #include <iostream>
 
 #include <opencv2/opencv.hpp>
-#include <filatti/hls.hpp>
+#include <filatti/hsv.hpp>
 
 #include "test.hpp"
 
-#define WINDOW_NAME "HLS Adjustment"
+#define WINDOW_NAME "HSV Adjustment"
 #define L_TRACKBAR_NAME "Brightness"
 #define S_TRACKBAR_NAME "Saturation"
 
 cv::Mat src;
-filatti::Hls hls;
-int l_trackbar_value = (int) (hls.get_brightness() * 100) + 100;
-int s_trackbar_value = (int) (hls.get_saturation() * 100) + 100;
+filatti::Hsv hsv;
+int l_trackbar_value = (int) (hsv.get_brightness() * 100) + 100;
+int s_trackbar_value = (int) (hsv.get_saturation() * 100) + 100;
 
 void on_trackbar(int, void*) {
-    hls.set_brightness((l_trackbar_value - 100) / 100.0);
-    hls.set_saturation((s_trackbar_value - 100) / 100.0);
+    hsv.set_brightness((l_trackbar_value - 100) / 100.0);
+    hsv.set_saturation((s_trackbar_value - 100) / 100.0);
 
     cv::Mat dst;
     auto before = get_current_milliseconds();
-    if (!hls.apply(src, dst))
+    if (!hsv.apply(src, dst))
         dst = src;
     auto after = get_current_milliseconds();
 

@@ -4,9 +4,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L/usr/local/opt/opencv3/lib -I/usr/loca
 include_directories(../include)
 
 set(SOURCE_FILES
-        saturation.cpp
         sharpness.cpp
-        hls.cpp
+        hsv.cpp
         contrast.cpp
         vignette.cpp
         temperature.cpp

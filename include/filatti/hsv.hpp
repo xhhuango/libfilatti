@@ -4,7 +4,7 @@
 #include <filatti/adjustment.hpp>
 
 namespace filatti {
-    class Hls : public Adjustment {
+    class Hsv : public Adjustment {
     private:
         double _brightness;
         double _saturation;
@@ -16,9 +16,9 @@ namespace filatti {
 
         inline uchar calculate_h(int h);
 
-        inline uchar calculate_l(int l);
-
         inline uchar calculate_s(int s);
+
+        inline uchar calculate_v(int v);
 
     public:
         const double BRIGHTNESS_NONE = 0;
@@ -29,9 +29,9 @@ namespace filatti {
         const double SATURATION_MIN = -1;
         const double SATURATION_MAX = 1;
 
-        Hls();
+        Hsv();
 
-        ~Hls();
+        ~Hsv();
 
         double get_brightness();
 
