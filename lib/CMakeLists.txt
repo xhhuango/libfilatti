@@ -6,7 +6,7 @@ include_directories(../include)
 set(SOURCE_FILES
         saturation.cpp
         sharpness.cpp
-        brightness.cpp
+        hls.cpp
         contrast.cpp
         vignette.cpp
         temperature.cpp
