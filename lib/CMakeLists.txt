@@ -5,7 +5,7 @@ include_directories(../include)
 
 set(SOURCE_FILES
         sharpness.cpp
-        hsv.cpp
+        hls.cpp
         contrast.cpp
         vignette.cpp
         temperature.cpp

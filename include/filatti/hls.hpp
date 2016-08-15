@@ -4,9 +4,10 @@
 #include <filatti/adjustment.hpp>
 
 namespace filatti {
-    class Hsv : public Adjustment {
+    class Hls : public Adjustment {
     private:
-        double _brightness;
+        int _hue;
+        double _lightness;
         double _saturation;
         cv::Mat _lut;
 
@@ -14,28 +15,30 @@ namespace filatti {
 
         void build_lut();
 
-        inline uchar calculate_h(int h);
-
-        inline uchar calculate_s(int s);
-
-        inline uchar calculate_v(int v);
-
     public:
-        const double BRIGHTNESS_NONE = 0;
-        const double BRIGHTNESS_MIN = -1;
-        const double BRIGHTNESS_MAX = 1;
+        const int HUE_NONE = 0;
+        const int HUE_MIN = -180;
+        const int HUE_MAX = 180;
+
+        const double LIGHTNESS_NONE = 0;
+        const double LIGHTNESS_MIN = -1;
+        const double LIGHTNESS_MAX = 1;
 
         const double SATURATION_NONE = 0;
         const double SATURATION_MIN = -1;
         const double SATURATION_MAX = 1;
 
-        Hsv();
+        Hls();
 
-        ~Hsv();
+        ~Hls();
 
-        double get_brightness();
+        int get_hue();
 
-        bool set_brightness(double brightness);
+        bool set_hue(int hue);
+
+        double get_lightness();
+
+        bool set_lightness(double lightness);
 
         double get_saturation();
 
