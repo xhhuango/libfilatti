@@ -23,8 +23,8 @@ inline bool Curves::check_input_points(const std::vector<uchar>& from, const std
 }
 
 std::vector<uchar> Curves::get_curves(const std::pair<std::vector<uchar>, std::vector<uchar>>& points) {
-    Spline spline(std::vector<double>(points.first.begin(), points.first.end()),
-                  std::vector<double>(points.second.begin(), points.second.end()));
+    interpolator::Spline spline(std::vector<double>(points.first.begin(), points.first.end()),
+                                std::vector<double>(points.second.begin(), points.second.end()));
     std::vector<uchar> curves(256);
     for (int i = 0; i < 256; ++i)
         curves[i] = cv::saturate_cast<uchar>(spline[i]);
@@ -125,37 +125,51 @@ void Curves::build_lut() {
     if (_lut.empty())
         _lut.create(256, 1, CV_8UC3);
 
-    Interpolator* value_interpolator;
-    if (_value_points.first.size() > 2)
-        value_interpolator = new Spline(std::vector<double>(_value_points.first.begin(), _value_points.first.end()),
-                                        std::vector<double>(_value_points.second.begin(), _value_points.second.end()));
-    else
-        value_interpolator = new Linear(std::vector<double>(_value_points.first.begin(), _value_points.first.end()),
-                                        std::vector<double>(_value_points.second.begin(), _value_points.second.end()));
+    interpolator::Interpolator* interpolator;
 
-    Interpolator* blue_interpolator;
-    if (_blue_points.first.size() > 2)
-        blue_interpolator = new Spline(std::vector<double>(_blue_points.first.begin(), _blue_points.first.end()),
-                                       std::vector<double>(_blue_points.second.begin(), _blue_points.second.end()));
-    else
-        blue_interpolator = new Linear(std::vector<double>(_blue_points.first.begin(), _blue_points.first.end()),
-                                       std::vector<double>(_blue_points.second.begin(), _blue_points.second.end()));
+    if (_value_points.first.size() > 2) {
+        interpolator =
+                new interpolator::Spline(std::vector<double>(_value_points.first.begin(), _value_points.first.end()),
+                                         std::vector<double>(_value_points.second.begin(), _value_points.second.end()));
+    } else {
+        interpolator =
+                new interpolator::Linear(std::vector<double>(_value_points.first.begin(), _value_points.first.end()),
+                                         std::vector<double>(_value_points.second.begin(), _value_points.second.end()));
+    }
+    std::unique_ptr<interpolator::Interpolator> value_interpolator(interpolator);
 
-    Interpolator* green_interpolator;
-    if (_green_points.first.size() > 2)
-        green_interpolator = new Spline(std::vector<double>(_green_points.first.begin(), _green_points.first.end()),
-                                        std::vector<double>(_green_points.second.begin(), _green_points.second.end()));
-    else
-        green_interpolator = new Linear(std::vector<double>(_green_points.first.begin(), _green_points.first.end()),
-                                        std::vector<double>(_green_points.second.begin(), _green_points.second.end()));
+    if (_blue_points.first.size() > 2) {
+        interpolator =
+                new interpolator::Spline(std::vector<double>(_blue_points.first.begin(), _blue_points.first.end()),
+                                         std::vector<double>(_blue_points.second.begin(), _blue_points.second.end()));
+    } else {
+        interpolator =
+                new interpolator::Linear(std::vector<double>(_blue_points.first.begin(), _blue_points.first.end()),
+                                         std::vector<double>(_blue_points.second.begin(), _blue_points.second.end()));
+    }
+    std::unique_ptr<interpolator::Interpolator> blue_interpolator(interpolator);
 
-    Interpolator* red_interpolator;
-    if (_red_points.first.size() > 2)
-        red_interpolator = new Spline(std::vector<double>(_red_points.first.begin(), _red_points.first.end()),
-                                      std::vector<double>(_red_points.second.begin(), _red_points.second.end()));
-    else
-        red_interpolator = new Linear(std::vector<double>(_red_points.first.begin(), _red_points.first.end()),
-                                      std::vector<double>(_red_points.second.begin(), _red_points.second.end()));
+    if (_green_points.first.size() > 2) {
+        interpolator =
+                new interpolator::Spline(std::vector<double>(_green_points.first.begin(), _green_points.first.end()),
+                                         std::vector<double>(_green_points.second.begin(), _green_points.second.end()));
+    } else {
+        interpolator =
+                new interpolator::Linear(std::vector<double>(_green_points.first.begin(), _green_points.first.end()),
+                                         std::vector<double>(_green_points.second.begin(), _green_points.second.end()));
+    }
+    std::unique_ptr<interpolator::Interpolator> green_interpolator(interpolator);
+
+    if (_red_points.first.size() > 2) {
+        interpolator =
+                new interpolator::Spline(std::vector<double>(_red_points.first.begin(), _red_points.first.end()),
+                                         std::vector<double>(_red_points.second.begin(), _red_points.second.end()));
+    } else {
+        interpolator =
+                new interpolator::Linear(std::vector<double>(_red_points.first.begin(), _red_points.first.end()),
+                                         std::vector<double>(_red_points.second.begin(), _red_points.second.end()));
+    }
+    std::unique_ptr<interpolator::Interpolator> red_interpolator(interpolator);
 
     for (int i = 0; i < 256; ++i) {
         double value = (*value_interpolator)[i];
@@ -163,9 +177,4 @@ void Curves::build_lut() {
                                              cv::saturate_cast<uchar>((*green_interpolator)[value]),
                                              cv::saturate_cast<uchar>((*red_interpolator)[value])};
     }
-
-    delete value_interpolator;
-    delete blue_interpolator;
-    delete green_interpolator;
-    delete red_interpolator;
 }

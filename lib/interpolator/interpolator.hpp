@@ -3,7 +3,7 @@
 
 #include <vector>
 
-namespace filatti {
+namespace interpolator {
     class Interpolator {
     public:
         virtual ~Interpolator() { }
@@ -12,9 +12,9 @@ namespace filatti {
 
         virtual std::vector<double> value(const std::vector<double>& x) const = 0;
 
-        virtual double operator[](const double& x) const = 0;
+        virtual double operator[](const double& x) const;
 
-        virtual std::vector<double> operator[](const std::vector<double>& x) const = 0;
+        virtual std::vector<double> operator[](const std::vector<double>& x) const;
     };
 }
 

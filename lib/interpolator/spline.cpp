@@ -1,6 +1,6 @@
 #include "spline.hpp"
 
-using namespace filatti;
+using namespace interpolator;
 
 Spline::Spline(const std::vector<double>& x, const std::vector<double>& y) {
     typedef std::vector<double>::difference_type SizeType;
@@ -33,11 +33,8 @@ Spline::Spline(const std::vector<double>& x, const std::vector<double>& y) {
     }
 
     for (SizeType i = 0; i < n; i++) {
-        _elements.push_back(Element(x[i], y[i], b[i], c[i], d[i]));
+        _elements.push_back(ElementType(x[i], y[i], b[i], c[i], d[i]));
     }
-}
-
-Spline::~Spline() {
 }
 
 double Spline::value(const double& x) const {
@@ -64,30 +61,14 @@ std::vector<double> Spline::value(const std::vector<double>& x) const {
     return ys;
 }
 
-double Spline::operator[](const double& x) const {
-    return value(x);
+Spline::SplineElement::SplineElement(double x) : Element(x) {
 }
 
-std::vector<double> Spline::operator[](const std::vector<double>& x) const {
-    return value(x);
+Spline::SplineElement::SplineElement(double x, double a, double b, double c, double d)
+        : Element(x), _a(a), _b(b), _c(c), _d(d) {
 }
 
-Spline::Element::Element(double x) : _x(x) {
-}
-
-Spline::Element::Element(double x, double a, double b, double c, double d)
-        : _x(x), _a(a), _b(b), _c(c), _d(d) {
-}
-
-double Spline::Element::eval(const double& x) const {
+double Spline::SplineElement::eval(const double& x) const {
     double xix(x - _x);
     return _a + _b * xix + _c * (xix * xix) + _d * (xix * xix * xix);
-}
-
-bool Spline::Element::operator<(const Element& e) const {
-    return _x < e._x;
-}
-
-bool Spline::Element::operator<(const double& x) const {
-    return _x < x;
 }
