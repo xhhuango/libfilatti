@@ -9,7 +9,11 @@ Contrast::Contrast() {
 Contrast::~Contrast() {
 }
 
-double Contrast::get_contrast() {
+bool Contrast::has_effect() const {
+    return _contrast != CONTRAST_NONE;
+}
+
+double Contrast::get_contrast() const {
     return _contrast;
 }
 
@@ -23,7 +27,7 @@ bool Contrast::set_contrast(double contrast) {
 }
 
 bool Contrast::apply(const cv::Mat& src, cv::Mat& dst) {
-    if (_contrast == CONTRAST_NONE) {
+    if (!has_effect()) {
         return false;
     } else {
         cv::LUT(src, _lut, dst);

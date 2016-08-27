@@ -18,7 +18,7 @@ namespace interpolator {
 
             virtual ~SplineElement() { };
 
-            double eval(const double& x) const;
+            virtual double eval(const double& x) const override;
         };
 
         typedef SplineElement ElementType;

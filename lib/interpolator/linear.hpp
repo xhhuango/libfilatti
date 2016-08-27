@@ -18,7 +18,7 @@ namespace interpolator {
 
             virtual ~LinearElement() { };
 
-            double eval(const double& x) const;
+            virtual double eval(const double& x) const override;
         };
 
         typedef LinearElement ElementType;

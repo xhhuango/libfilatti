@@ -15,6 +15,8 @@ int trackbar_value = (int) (sharpness.get_sharpness() * 100);
 void on_trackbar(int, void*) {
     sharpness.set_sharpness(trackbar_value / 100.0);
 
+    std::cout << "Sharpness: " << trackbar_value << std::endl;
+
     cv::Mat dst;
     auto before = get_current_milliseconds();
     if (!sharpness.apply(src, dst))
@@ -29,7 +31,7 @@ int main() {
     src = cv::imread(IMAGE_FILE_1);
 
     cv::namedWindow(WINDOW_NAME, cv::WINDOW_NORMAL);
-    cv::createTrackbar(TRACKBAR_NAME, WINDOW_NAME, &trackbar_value, 100, on_trackbar);
+    cv::createTrackbar(TRACKBAR_NAME, WINDOW_NAME, &trackbar_value, 2000, on_trackbar);
     on_trackbar(trackbar_value, nullptr);
 
     cv::waitKey(0);

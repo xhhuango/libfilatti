@@ -10,6 +10,9 @@ namespace filatti {
     }
 
     class Adjustment {
+    protected:
+        virtual bool has_effect() const = 0;
+
     public:
         virtual ~Adjustment() { }
 

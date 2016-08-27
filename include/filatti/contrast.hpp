@@ -11,6 +11,9 @@ namespace filatti {
 
         void build_lut();
 
+    protected:
+        virtual bool has_effect() const override;
+
     public:
         const double CONTRAST_NONE = 1;
         const double CONTRAST_MIN = 0;
@@ -18,9 +21,9 @@ namespace filatti {
 
         Contrast();
 
-        ~Contrast();
+        virtual ~Contrast();
 
-        double get_contrast();
+        double get_contrast() const;
 
         bool set_contrast(double contrast);
 

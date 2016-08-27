@@ -11,16 +11,19 @@ namespace filatti {
 
         void build_blurred(const cv::Mat& src);
 
+    protected:
+        virtual bool has_effect() const override;
+
     public:
-        const double SHARPNESS_NONE = 0;
-        const double SHARPNESS_MIN = SHARPNESS_NONE;
-        const double SHARPNESS_MAX = 1;
+        const double SHARPNESS_MIN = 0;
+        const double SHARPNESS_MAX = 20;
+        const double SHARPNESS_NONE = SHARPNESS_MIN;
 
         Sharpness();
 
-        ~Sharpness();
+        virtual ~Sharpness();
 
-        double get_sharpness();
+        double get_sharpness() const;
 
         bool set_sharpness(double sharpness);
 

@@ -15,14 +15,14 @@ Curves::Curves() {
 Curves::~Curves() {
 }
 
-inline bool Curves::check_input_points(const std::vector<uchar>& from, const std::vector<uchar>& to) {
+inline bool Curves::check_input_points(const std::vector<uchar>& from, const std::vector<uchar>& to) const {
     return !(!within((int) from.size(), POINTS_SIZE_MIN, POINTS_SIZE_MAX)
              || (from.size() != to.size())
              || from.front() != POINTS_NONE.front()
              || from.back() != POINTS_NONE.back());
 }
 
-std::vector<uchar> Curves::get_curves(const std::pair<std::vector<uchar>, std::vector<uchar>>& points) {
+std::vector<uchar> Curves::get_curves(const std::pair<std::vector<uchar>, std::vector<uchar>>& points) const {
     interpolator::Spline spline(std::vector<double>(points.first.begin(), points.first.end()),
                                 std::vector<double>(points.second.begin(), points.second.end()));
     std::vector<uchar> curves(256);
@@ -40,11 +40,11 @@ bool Curves::set_value_points(std::vector<uchar> from, std::vector<uchar> to) {
     return true;
 }
 
-std::pair<std::vector<uchar>, std::vector<uchar>> Curves::get_value_points() {
+std::pair<std::vector<uchar>, std::vector<uchar>> Curves::get_value_points() const {
     return _value_points;
 }
 
-std::vector<uchar> Curves::get_value_curves() {
+std::vector<uchar> Curves::get_value_curves() const {
     return get_curves(_value_points);
 }
 
@@ -57,11 +57,11 @@ bool Curves::set_blue_points(std::vector<uchar> from, std::vector<uchar> to) {
     return true;
 }
 
-std::pair<std::vector<uchar>, std::vector<uchar>> Curves::get_blue_points() {
+std::pair<std::vector<uchar>, std::vector<uchar>> Curves::get_blue_points() const {
     return _blue_points;
 }
 
-std::vector<uchar> Curves::get_blue_curves() {
+std::vector<uchar> Curves::get_blue_curves() const {
     return get_curves(_blue_points);
 }
 
@@ -74,11 +74,11 @@ bool Curves::set_green_points(std::vector<uchar> from, std::vector<uchar> to) {
     return true;
 }
 
-std::pair<std::vector<uchar>, std::vector<uchar>> Curves::get_green_points() {
+std::pair<std::vector<uchar>, std::vector<uchar>> Curves::get_green_points() const {
     return _green_points;
 }
 
-std::vector<uchar> Curves::get_green_curves() {
+std::vector<uchar> Curves::get_green_curves() const {
     return get_curves(_green_points);
 }
 
@@ -91,11 +91,11 @@ bool Curves::set_red_points(std::vector<uchar> from, std::vector<uchar> to) {
     return true;
 }
 
-std::pair<std::vector<uchar>, std::vector<uchar>> Curves::get_red_points() {
+std::pair<std::vector<uchar>, std::vector<uchar>> Curves::get_red_points() const {
     return _red_points;
 }
 
-std::vector<uchar> Curves::get_red_curves() {
+std::vector<uchar> Curves::get_red_curves() const {
     return get_curves(_red_points);
 }
 
@@ -108,7 +108,7 @@ bool Curves::apply(const cv::Mat& src, cv::Mat& dst) {
     }
 }
 
-bool Curves::has_effect() {
+bool Curves::has_effect() const {
     return !(_value_points.first == POINTS_NONE && _value_points.second == POINTS_NONE
              && _blue_points.first == POINTS_NONE && _blue_points.second == POINTS_NONE
              && _green_points.first == POINTS_NONE && _green_points.second == POINTS_NONE

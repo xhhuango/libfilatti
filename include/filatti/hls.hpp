@@ -11,9 +11,10 @@ namespace filatti {
         double _saturation;
         cv::Mat _lut;
 
-        bool has_effect();
-
         void build_lut();
+
+    protected:
+        virtual bool has_effect() const override;
 
     public:
         const int HUE_NONE = 0;
@@ -30,17 +31,17 @@ namespace filatti {
 
         Hls();
 
-        ~Hls();
+        virtual ~Hls();
 
-        int get_hue();
+        int get_hue() const;
 
         bool set_hue(int hue);
 
-        double get_lightness();
+        double get_lightness() const;
 
         bool set_lightness(double lightness);
 
-        double get_saturation();
+        double get_saturation() const;
 
         bool set_saturation(double saturation);
 

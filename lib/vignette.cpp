@@ -1,5 +1,5 @@
 #include <filatti/vignette.hpp>
-#include <iostream>
+#include "gradient/radial.hpp"
 
 using namespace filatti;
 
@@ -15,7 +15,11 @@ Vignette::Vignette()
 Vignette::~Vignette() {
 }
 
-std::vector<double> Vignette::get_center() {
+bool Vignette::has_effect() const {
+    return _strength != STRENGTH_NONE && _radius != RADIUS_NONE;
+}
+
+cv::Point2d Vignette::get_center() const {
     return _center;
 }
 
@@ -23,7 +27,7 @@ bool Vignette::set_center(double x, double y) {
     if (!within(x, CENTER_MIN, CENTER_MAX) || !within(y, CENTER_MIN, CENTER_MAX))
         return false;
 
-    _center = std::vector<double>{x, y};
+    _center = cv::Point2d(x, y);
 
     if (!_vignette.empty())
         _vignette.release();
@@ -31,7 +35,7 @@ bool Vignette::set_center(double x, double y) {
     return true;
 }
 
-double Vignette::get_radius() {
+double Vignette::get_radius() const {
     return _radius;
 }
 
@@ -47,7 +51,7 @@ bool Vignette::set_radius(double radius) {
     return true;
 }
 
-double Vignette::get_strength() {
+double Vignette::get_strength() const {
     return _strength;
 }
 
@@ -59,7 +63,7 @@ bool Vignette::set_strength(double strength) {
     return true;
 }
 
-double Vignette::get_feathering() {
+double Vignette::get_feathering() const {
     return _feathering;
 }
 
@@ -75,7 +79,7 @@ bool Vignette::set_feathering(double feathering) {
     return true;
 }
 
-cv::Scalar_<uchar> Vignette::get_color() {
+cv::Scalar_<uchar> Vignette::get_color() const {
     return _color;
 }
 
@@ -84,7 +88,7 @@ bool Vignette::set_color(cv::Scalar_<uchar> color) {
     return true;
 }
 
-bool Vignette::is_fit_to_image() {
+bool Vignette::is_fit_to_image() const {
     return _fit_to_image;
 }
 
@@ -93,80 +97,29 @@ void Vignette::set_fit_to_image(bool fit_to_image) {
 }
 
 bool Vignette::apply(const cv::Mat& src, cv::Mat& dst) {
-    if (_strength == STRENGTH_NONE || _radius == RADIUS_NONE) {
+    if (!has_effect()) {
         return false;
     } else {
         if (_vignette.empty())
-            build_vignette(src);
+            build_vignette(src.rows, src.cols);
         blend_vignette(src, dst);
         return true;
     }
 }
 
-void Vignette::build_vignette(const cv::Mat& src) {
-    _vignette.create(src.size(), CV_8UC1);
-    int width = _vignette.cols;
-    int height = _vignette.rows;
+void Vignette::build_vignette(int rows, int cols) {
+    _vignette.create(rows, cols, CV_8UC1);
 
-    double center_x = width * _center[0];
-    double center_y = height * _center[1];
-
-    double radius_width = width * _radius;
-    double radius_height = height * _radius;
-
-    double radius_width_pow2 = radius_width * radius_width;
-    double radius_height_pow2 = radius_height * radius_height;
-
-    double feathering = (_fit_to_image)
-                        ? _feathering * (radius_width * radius_height)
-                        : _feathering * (radius_width < radius_height ? radius_width_pow2 : radius_height_pow2);
-    double radius_circular = (radius_width < radius_height) ? radius_width_pow2 : radius_height_pow2;
-    double radius_min = radius_circular - feathering;
-
-    for (int row = 0; row < height; ++row) {
-        for (int col = 0; col < width; ++col) {
-            double x = col - center_x;
-            double y = row - center_y;
-            double x_pow2 = x * x;
-            double y_pow2 = y * y;
-
-            double blend;
-
-            if (_fit_to_image) {
-                double radius_max = radius_height_pow2 - ((radius_height_pow2 * x_pow2) / radius_width_pow2);
-                if (y_pow2 > radius_max) {
-                    blend = 1;
-                } else {
-                    radius_min = radius_max - feathering;
-                    if (y_pow2 >= radius_min) {
-                        blend = (y_pow2 - radius_min) / feathering;
-                    } else {
-                        blend = 0;
-                    }
-                }
-            } else {
-                if (x_pow2 + y_pow2 > radius_circular) {
-                    blend = 1;
-                } else {
-                    if (x_pow2 + y_pow2 > radius_min) {
-                        blend = (x_pow2 + y_pow2 - radius_min) / feathering;
-                    } else {
-                        blend = 0;
-                    }
-                }
-            }
-
-            _vignette.at<uchar>(row, col) = cv::saturate_cast<uchar>(255.0 * blend);
-        }
-    }
+    gradient::Radial radial(_center.x, _center.y, _radius, _feathering, _fit_to_image);
+    radial.create(_vignette);
 }
 
-void Vignette::blend_vignette(const cv::Mat& src, cv::Mat& dst) {
+void Vignette::blend_vignette(const cv::Mat& src, cv::Mat& dst) const {
     cv::Mat vignette_strength(src.size(), src.type());
     cv::mixChannels(_vignette * _strength, vignette_strength, std::vector<int>{0, 0, 0, 1, 0, 2});
 
     cv::Mat vignette(src.size(), src.type(), _color);
 
-    dst = src.mul(cv::Scalar_<uchar>(255, 255, 255) - vignette_strength, 1.0 / 255.0)
-          + vignette.mul(vignette_strength, 1.0 / 255.0);
+    dst = src.mul(vignette_strength, 1.0 / 255.0)
+          + vignette.mul(cv::Scalar_<uchar>(255, 255, 255) - vignette_strength, 1.0 / 255.0);
 }

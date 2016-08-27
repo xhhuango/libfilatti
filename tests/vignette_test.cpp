@@ -40,7 +40,7 @@ int main() {
     src = cv::imread(IMAGE_FILE_1);
 
     cv::namedWindow(WINDOW_NAME, cv::WINDOW_NORMAL);
-    cv::createTrackbar(RADIUS_TRACKBAR_NAME, WINDOW_NAME, &radius_trackbar_value, 100, on_trackbar);
+    cv::createTrackbar(RADIUS_TRACKBAR_NAME, WINDOW_NAME, &radius_trackbar_value, 200, on_trackbar);
     cv::createTrackbar(FEATHERING_TRACKBAR_NAME, WINDOW_NAME, &feathering_trackbar_value, 100, on_trackbar);
     cv::createTrackbar(STRENGTH_TRACKBAR_NAME, WINDOW_NAME, &strength_trackbar_value, 100, on_trackbar);
     on_trackbar(0, nullptr);

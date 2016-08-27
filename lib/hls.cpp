@@ -13,7 +13,7 @@ Hls::Hls() {
 Hls::~Hls() {
 }
 
-int Hls::get_hue() {
+int Hls::get_hue() const {
     return _hue;
 }
 
@@ -26,7 +26,7 @@ bool Hls::set_hue(int hue) {
     return true;
 }
 
-double Hls::get_lightness() {
+double Hls::get_lightness() const {
     return _lightness;
 }
 
@@ -39,7 +39,7 @@ bool Hls::set_lightness(double lightness) {
     return true;
 }
 
-double Hls::get_saturation() {
+double Hls::get_saturation() const {
     return _saturation;
 }
 
@@ -52,7 +52,7 @@ bool Hls::set_saturation(double saturation) {
     return true;
 }
 
-bool Hls::has_effect() {
+bool Hls::has_effect() const {
     return _hue != HUE_NONE || _lightness != LIGHTNESS_NONE || _saturation != SATURATION_NONE;
 }
 

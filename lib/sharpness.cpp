@@ -1,6 +1,6 @@
 #include <filatti/sharpness.hpp>
 
-#include <opencv2/imgproc.hpp>
+#include <opencv2/opencv.hpp>
 
 using namespace filatti;
 
@@ -11,7 +11,11 @@ Sharpness::Sharpness() {
 Sharpness::~Sharpness() {
 }
 
-double Sharpness::get_sharpness() {
+bool Sharpness::has_effect() const {
+    return _sharpness != SHARPNESS_NONE;
+}
+
+double Sharpness::get_sharpness() const {
     return _sharpness;
 }
 
@@ -28,7 +32,7 @@ bool Sharpness::set_sharpness(double sharpness) {
 }
 
 bool Sharpness::apply(const cv::Mat& src, cv::Mat& dst) {
-    if (_sharpness == SHARPNESS_NONE) {
+    if (!has_effect()) {
         return false;
     } else {
         if (_blurred.empty())

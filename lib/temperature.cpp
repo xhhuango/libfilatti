@@ -12,7 +12,11 @@ Temperature::Temperature() {
 Temperature::~Temperature() {
 }
 
-unsigned int Temperature::get_kelvin() {
+bool Temperature::has_effect() const {
+    return _strength != STRENGTH_NONE && _kelvin != KELVIN_NONE;
+}
+
+unsigned int Temperature::get_kelvin() const {
     return _kelvin;
 }
 
@@ -28,7 +32,7 @@ bool Temperature::set_kelvin(unsigned int kelvin) {
     return true;
 }
 
-double Temperature::get_strength() {
+double Temperature::get_strength() const {
     return _strength;
 }
 
@@ -45,7 +49,7 @@ bool Temperature::set_strength(double strength) {
 }
 
 bool Temperature::apply(const cv::Mat& src, cv::Mat& dst) {
-    if (_strength == STRENGTH_NONE || _kelvin == KELVIN_NONE) {
+    if (!has_effect()) {
         return false;
     } else {
         if (_lut.empty())
@@ -68,11 +72,11 @@ bool Temperature::apply(const cv::Mat& src, cv::Mat& dst) {
     }
 }
 
-cv::Vec3b Temperature::kelvin_to_color(unsigned int kelvin) {
+cv::Vec3b Temperature::kelvin_to_color(unsigned int kelvin) const {
     return cv::Vec3b{kelvin_to_b(kelvin), kelvin_to_g(kelvin), kelvin_to_r(kelvin)};
 }
 
-uchar Temperature::kelvin_to_b(unsigned int kelvin) {
+uchar Temperature::kelvin_to_b(unsigned int kelvin) const {
     double k = kelvin / 100.0;
 
     if (k >= 66) {
@@ -85,7 +89,7 @@ uchar Temperature::kelvin_to_b(unsigned int kelvin) {
     }
 }
 
-uchar Temperature::kelvin_to_g(unsigned int kelvin) {
+uchar Temperature::kelvin_to_g(unsigned int kelvin) const {
     double green;
     double k = kelvin / 100.0;
 
@@ -98,7 +102,7 @@ uchar Temperature::kelvin_to_g(unsigned int kelvin) {
     return cv::saturate_cast<uchar>(green);
 }
 
-uchar Temperature::kelvin_to_r(unsigned int kelvin) {
+uchar Temperature::kelvin_to_r(unsigned int kelvin) const {
     double k = kelvin / 100.0;
 
     if (k <= 66) {
