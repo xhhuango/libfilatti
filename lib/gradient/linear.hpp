@@ -5,8 +5,17 @@
 
 namespace gradient {
     class Linear : public Gradient {
+    private:
+        double _center_x;
+        double _center_y;
+        double _radius;
+        double _feathering;
+        double _angle;
+
+        void build_gradient(cv::Mat& gradient, double feathering) const;
+
     public:
-        Linear();
+        Linear(double center_x, double center_y, double radius, double feathering, double angle);
 
         virtual ~Linear() { }
 

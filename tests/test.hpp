@@ -4,6 +4,8 @@
 #include <string>
 std::string IMAGE_FILE_1("../tests/test1.jpg");
 std::string IMAGE_FILE_2("../tests/test2.jpg");
+std::string IMAGE_FILE_400_400("../tests/test_400_400.jpg");
+std::string IMAGE_FILE_640_360("../tests/test_640_360.jpg");
 
 #include <chrono>
 inline std::chrono::milliseconds get_current_milliseconds() {

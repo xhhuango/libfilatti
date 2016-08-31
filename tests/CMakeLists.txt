@@ -22,3 +22,12 @@ target_link_libraries(temperature_test filatti)
 
 add_executable(curves_test curves_test.cpp)
 target_link_libraries(curves_test filatti)
+
+add_executable(tilt_shift_test tilt_shift_test.cpp)
+target_link_libraries(tilt_shift_test filatti)
+
+add_executable(linear_gradient_test linear_gradient_test.cpp)
+target_link_libraries(linear_gradient_test filatti)
+
+add_executable(radial_gradient_test radial_gradient_test.cpp)
+target_link_libraries(radial_gradient_test filatti)

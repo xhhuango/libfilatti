@@ -5,7 +5,7 @@ include_directories(../include)
 
 set(SOURCE_LIB_FILES
         interpolator/element.cpp interpolator/interpolator.cpp interpolator/spline.cpp interpolator/linear.cpp
-        gradient/radial.cpp
+        gradient/radial.cpp gradient/linear.cpp
         )
 
 set(SOURCE_FILES
@@ -16,6 +16,7 @@ set(SOURCE_FILES
         vignette.cpp
         temperature.cpp
         curves.cpp
+        tilt_shift.cpp
         )
 
 add_library(filatti ${SOURCE_FILES})
