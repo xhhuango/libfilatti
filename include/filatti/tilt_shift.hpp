@@ -24,8 +24,6 @@ namespace filatti {
 
         void create_mask(const cv::Mat& src);
 
-        void blend(const cv::Mat& src, cv::Mat& dst) const;
-
     protected:
         virtual bool has_effect() const override;
 

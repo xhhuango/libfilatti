@@ -9,6 +9,8 @@ namespace filatti {
         double _contrast;
         cv::Mat _lut;
 
+        void release_lut();
+
         void build_lut();
 
     protected:

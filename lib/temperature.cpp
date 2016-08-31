@@ -21,14 +21,12 @@ unsigned int Temperature::get_kelvin() const {
 }
 
 bool Temperature::set_kelvin(unsigned int kelvin) {
-    if (!within(kelvin, KELVIN_MIN, KELVIN_MAX))
+    if (!within(kelvin, KELVIN_MIN, KELVIN_MAX)) {
         return false;
+    }
 
     _kelvin = kelvin;
-
-    if (!_lut.empty())
-        _lut.release();
-
+    release_lut();
     return true;
 }
 
@@ -37,14 +35,12 @@ double Temperature::get_strength() const {
 }
 
 bool Temperature::set_strength(double strength) {
-    if (!within(strength, STRENGTH_MIN, STRENGTH_MAX))
+    if (!within(strength, STRENGTH_MIN, STRENGTH_MAX)) {
         return false;
+    }
 
     _strength = strength;
-
-    if (!_lut.empty())
-        _lut.release();
-
+    release_lut();
     return true;
 }
 
@@ -52,8 +48,9 @@ bool Temperature::apply(const cv::Mat& src, cv::Mat& dst) {
     if (!has_effect()) {
         return false;
     } else {
-        if (_lut.empty())
+        if (_lut.empty()) {
             build_lut(kelvin_to_color(_kelvin));
+        }
 
         cv::Mat orig_y;
         cv::Mat ycrcb;
@@ -113,8 +110,16 @@ uchar Temperature::kelvin_to_r(unsigned int kelvin) const {
     }
 }
 
+void Temperature::release_lut() {
+    if (!_lut.empty()) {
+        _lut.release();
+    }
+}
+
 void Temperature::build_lut(const cv::Vec3b& color) {
-    _lut.create(256, 1, CV_8UC3);
+    if (_lut.empty()) {
+        _lut.create(256, 1, CV_8UC3);
+    }
 
     double kelvin_blue = color[0] * _strength;
     double kelvin_green = color[1] * _strength;

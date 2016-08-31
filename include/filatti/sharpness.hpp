@@ -9,8 +9,6 @@ namespace filatti {
         double _sharpness;
         cv::Mat _blurred;
 
-        void build_blurred(const cv::Mat& src);
-
     protected:
         virtual bool has_effect() const override;
 
@@ -26,6 +24,8 @@ namespace filatti {
         double get_sharpness() const;
 
         bool set_sharpness(double sharpness);
+
+        void blur(const cv::Mat& src, cv::Mat& dst) const;
 
         virtual bool apply(const cv::Mat& src, cv::Mat& dst) override;
     };

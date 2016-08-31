@@ -18,11 +18,12 @@ int Hls::get_hue() const {
 }
 
 bool Hls::set_hue(int hue) {
-    if (!within(hue, HUE_MIN, HUE_MAX))
+    if (!within(hue, HUE_MIN, HUE_MAX)) {
         return false;
+    }
 
     _hue = hue;
-    build_lut();
+    release_lut();
     return true;
 }
 
@@ -31,11 +32,12 @@ double Hls::get_lightness() const {
 }
 
 bool Hls::set_lightness(double lightness) {
-    if (!within(lightness, LIGHTNESS_MIN, LIGHTNESS_MAX))
+    if (!within(lightness, LIGHTNESS_MIN, LIGHTNESS_MAX)) {
         return false;
+    }
 
     _lightness = lightness;
-    build_lut();
+    release_lut();
     return true;
 }
 
@@ -44,11 +46,12 @@ double Hls::get_saturation() const {
 }
 
 bool Hls::set_saturation(double saturation) {
-    if (!within(saturation, SATURATION_MIN, SATURATION_MAX))
+    if (!within(saturation, SATURATION_MIN, SATURATION_MAX)) {
         return false;
+    }
 
     _saturation = saturation;
-    build_lut();
+    release_lut();
     return true;
 }
 
@@ -60,6 +63,10 @@ bool Hls::apply(const cv::Mat& src, cv::Mat& dst) {
     if (!has_effect()) {
         return false;
     } else {
+        if (_lut.empty()) {
+            build_lut();
+        }
+
         cv::Mat hls;
         cv::cvtColor(src, hls, cv::COLOR_BGR2HLS);
 
@@ -70,14 +77,13 @@ bool Hls::apply(const cv::Mat& src, cv::Mat& dst) {
     }
 }
 
-void Hls::build_lut() {
-    if (!has_effect()) {
-        if (!_lut.empty()) {
-            _lut.release();
-        }
-        return;;
+void Hls::release_lut() {
+    if (!_lut.empty()) {
+        _lut.release();
     }
+}
 
+void Hls::build_lut() {
     if (_lut.empty()) {
         _lut.create(256, 1, CV_8UC3);
     }
@@ -86,10 +92,11 @@ void Hls::build_lut() {
 
     for (int i = 0; i < 256; ++i) {
         int h_int = i + h_shift;
-        if (h_int > 180)
+        if (h_int > 180) {
             h_int %= 180;
-        else if (h_int < 0)
+        } else if (h_int < 0) {
             h_int += 180;
+        }
         uchar h = cv::saturate_cast<uchar>(h_int);
 
         uchar l = cv::saturate_cast<uchar>(i + (i * _lightness));

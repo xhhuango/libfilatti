@@ -26,17 +26,19 @@ std::vector<uchar> Curves::get_curves(const std::pair<std::vector<uchar>, std::v
     interpolator::Spline spline(std::vector<double>(points.first.begin(), points.first.end()),
                                 std::vector<double>(points.second.begin(), points.second.end()));
     std::vector<uchar> curves(256);
-    for (int i = 0; i < 256; ++i)
+    for (int i = 0; i < 256; ++i) {
         curves[i] = cv::saturate_cast<uchar>(spline[i]);
+    }
     return curves;
 }
 
 bool Curves::set_value_points(std::vector<uchar> from, std::vector<uchar> to) {
-    if (!check_input_points(from, to))
+    if (!check_input_points(from, to)) {
         return false;
+    }
 
     _value_points = std::make_pair(std::move(from), std::move(to));
-    build_lut();
+    release_lut();
     return true;
 }
 
@@ -49,11 +51,12 @@ std::vector<uchar> Curves::get_value_curves() const {
 }
 
 bool Curves::set_blue_points(std::vector<uchar> from, std::vector<uchar> to) {
-    if (!check_input_points(from, to))
+    if (!check_input_points(from, to)) {
         return false;
+    }
 
     _blue_points = std::make_pair(std::move(from), std::move(to));
-    build_lut();
+    release_lut();
     return true;
 }
 
@@ -66,11 +69,12 @@ std::vector<uchar> Curves::get_blue_curves() const {
 }
 
 bool Curves::set_green_points(std::vector<uchar> from, std::vector<uchar> to) {
-    if (!check_input_points(from, to))
+    if (!check_input_points(from, to)) {
         return false;
+    }
 
     _green_points = std::make_pair(std::move(from), std::move(to));
-    build_lut();
+    release_lut();
     return true;
 }
 
@@ -83,11 +87,12 @@ std::vector<uchar> Curves::get_green_curves() const {
 }
 
 bool Curves::set_red_points(std::vector<uchar> from, std::vector<uchar> to) {
-    if (!check_input_points(from, to))
+    if (!check_input_points(from, to)) {
         return false;
+    }
 
     _red_points = std::make_pair(std::move(from), std::move(to));
-    build_lut();
+    release_lut();
     return true;
 }
 
@@ -99,15 +104,6 @@ std::vector<uchar> Curves::get_red_curves() const {
     return get_curves(_red_points);
 }
 
-bool Curves::apply(const cv::Mat& src, cv::Mat& dst) {
-    if (!has_effect()) {
-        return false;
-    } else {
-        cv::LUT(src, _lut, dst);
-        return true;
-    }
-}
-
 bool Curves::has_effect() const {
     return !(_value_points.first == POINTS_NONE && _value_points.second == POINTS_NONE
              && _blue_points.first == POINTS_NONE && _blue_points.second == POINTS_NONE
@@ -115,15 +111,28 @@ bool Curves::has_effect() const {
              && _red_points.first == POINTS_NONE && _red_points.second == POINTS_NONE);
 }
 
-void Curves::build_lut() {
+bool Curves::apply(const cv::Mat& src, cv::Mat& dst) {
     if (!has_effect()) {
-        if (!_lut.empty())
-            _lut.release();
-        return;
+        return false;
+    } else {
+        if (_lut.empty()) {
+            build_lut();
+        }
+        cv::LUT(src, _lut, dst);
+        return true;
     }
+}
 
-    if (_lut.empty())
+void Curves::release_lut() {
+    if (!_lut.empty()) {
+        _lut.release();
+    }
+}
+
+void Curves::build_lut() {
+    if (_lut.empty()) {
         _lut.create(256, 1, CV_8UC3);
+    }
 
     interpolator::Interpolator* interpolator;
 

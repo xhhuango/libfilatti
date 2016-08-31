@@ -13,9 +13,9 @@ namespace filatti {
         cv::Scalar_<uchar> _color;
         bool _fit_to_image;
 
-        cv::Mat _vignette;
+        cv::Mat _mask;
 
-        void build_vignette(int rows, int cols);
+        void create_mask(int rows, int cols);
 
         void blend_vignette(const cv::Mat& src, cv::Mat& dst) const;
 

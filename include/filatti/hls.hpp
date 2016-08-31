@@ -11,6 +11,8 @@ namespace filatti {
         double _saturation;
         cv::Mat _lut;
 
+        void release_lut();
+
         void build_lut();
 
     protected:

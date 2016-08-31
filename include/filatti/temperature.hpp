@@ -18,6 +18,8 @@ namespace filatti {
 
         uchar kelvin_to_r(unsigned int kelvin) const;
 
+        void release_lut();
+
         void build_lut(const cv::Vec3b& color);
 
     protected:

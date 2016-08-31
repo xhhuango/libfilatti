@@ -20,28 +20,28 @@ double Sharpness::get_sharpness() const {
 }
 
 bool Sharpness::set_sharpness(double sharpness) {
-    if (!within(sharpness, SHARPNESS_MIN, SHARPNESS_MAX))
+    if (!within(sharpness, SHARPNESS_MIN, SHARPNESS_MAX)) {
         return false;
+    }
 
     _sharpness = sharpness;
-
-    if (sharpness == SHARPNESS_NONE && !_blurred.empty())
-        _blurred.release();
-
     return true;
+}
+
+void Sharpness::blur(const cv::Mat& src, cv::Mat& dst) const {
+    cv::GaussianBlur(src, dst, cv::Size(0, 0), 3);
 }
 
 bool Sharpness::apply(const cv::Mat& src, cv::Mat& dst) {
     if (!has_effect()) {
         return false;
     } else {
-        if (_blurred.empty())
-            build_blurred(src);
+        if (!_blurred.empty()) {
+            _blurred.release();
+        }
+        blur(src, _blurred);
+
         cv::addWeighted(src, 1 + _sharpness, _blurred, -_sharpness, 0, dst);
         return true;
     }
-}
-
-void Sharpness::build_blurred(const cv::Mat& src) {
-    cv::GaussianBlur(src, _blurred, cv::Size(0, 0), 3);
 }

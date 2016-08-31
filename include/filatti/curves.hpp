@@ -17,6 +17,8 @@ namespace filatti {
 
         std::vector<uchar> get_curves(const std::pair<std::vector<uchar>, std::vector<uchar>>& points) const;
 
+        void release_lut();
+
         void build_lut();
 
     protected:
