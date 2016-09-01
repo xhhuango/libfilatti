@@ -6,45 +6,28 @@
 namespace filatti {
     class Temperature : public Adjustment {
     private:
-        unsigned int _kelvin;
-        double _strength;
+        double _temperature;
         cv::Mat _lut;
-
-        cv::Vec3b kelvin_to_color(unsigned int kelvin) const;
-
-        uchar kelvin_to_b(unsigned int kelvin) const;
-
-        uchar kelvin_to_g(unsigned int kelvin) const;
-
-        uchar kelvin_to_r(unsigned int kelvin) const;
 
         void release_lut();
 
-        void build_lut(const cv::Vec3b& color);
+        void build_lut();
 
     protected:
         virtual bool has_effect() const override;
 
     public:
-        const unsigned int KELVIN_NONE = 6600;
-        const unsigned int KELVIN_MIN = 1000;
-        const unsigned int KELVIN_MAX = 40000;
-
-        const double STRENGTH_MIN = 0;
-        const double STRENGTH_MAX = 1;
-        const double STRENGTH_NONE = STRENGTH_MIN;
+        const double TEMPERATURE_MIN = -0.5;
+        const double TEMPERATURE_MAX = 0.5;
+        const double TEMPERATURE_NONE = 0;
 
         Temperature();
 
         virtual ~Temperature();
 
-        unsigned int get_kelvin() const;
+        double get_temperature() const;
 
-        bool set_kelvin(unsigned int kelvin);
-
-        double get_strength() const;
-
-        bool set_strength(double strength);
+        bool set_temperature(double temperature);
 
         virtual bool apply(const cv::Mat& src, cv::Mat& dst) override;
     };

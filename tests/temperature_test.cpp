@@ -6,19 +6,16 @@
 #include "test.hpp"
 
 #define WINDOW_NAME "Temperature Adjustment"
-#define KELVIN_TRACKBAR_NAME "Kelvin"
-#define STRENGTH_TRACKBAR_NAME "Strength"
+#define TEMPERATURE_TRACKBAR_NAME "Temperature"
 
 cv::Mat src;
 filatti::Temperature temperature;
-int kelvin_trackbar_value = (temperature.get_kelvin() - 1500) / 100;
-int strength_trackbar_value = (int) (temperature.get_strength() * 200);
+int temperature_trackbar_value = (int) (temperature.get_temperature() * 100. + 50);
 
 void on_trackbar(int, void*) {
-    temperature.set_kelvin(kelvin_trackbar_value * 100 + 1500);
-    temperature.set_strength(strength_trackbar_value / 200.0);
+    temperature.set_temperature((temperature_trackbar_value - 50) / 100.);
 
-    std::cout << "kelvin=" << temperature.get_kelvin() << ", strength=" << temperature.get_strength() << std::endl;
+    std::cout << "temperature=" << temperature.get_temperature() << std::endl;
 
     cv::Mat dst;
     auto before = get_current_milliseconds();
@@ -35,9 +32,8 @@ int main() {
     src = cv::imread(IMAGE_FILE_1);
 
     cv::namedWindow(WINDOW_NAME, cv::WINDOW_NORMAL);
-    cv::createTrackbar(KELVIN_TRACKBAR_NAME, WINDOW_NAME, &kelvin_trackbar_value, 100, on_trackbar);
-    cv::createTrackbar(STRENGTH_TRACKBAR_NAME, WINDOW_NAME, &strength_trackbar_value, 100, on_trackbar);
-    on_trackbar(strength_trackbar_value, nullptr);
+    cv::createTrackbar(TEMPERATURE_TRACKBAR_NAME, WINDOW_NAME, &temperature_trackbar_value, 100, on_trackbar);
+    on_trackbar(0, nullptr);
 
     cv::waitKey(0);
     return 0;
