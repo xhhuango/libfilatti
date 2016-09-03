@@ -25,7 +25,7 @@ namespace filatti {
         void create_mask(const cv::Mat& src);
 
     protected:
-        virtual bool has_effect() const override;
+        virtual bool has_effect() const noexcept override;
 
     public:
         const double CENTER_MIN = 0;

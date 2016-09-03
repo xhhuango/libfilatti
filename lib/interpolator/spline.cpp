@@ -1,6 +1,6 @@
 #include "spline.hpp"
 
-using namespace interpolator;
+using namespace filatti::interpolator;
 
 Spline::Spline(const std::vector<double>& x, const std::vector<double>& y) {
     typedef std::vector<double>::difference_type SizeType;

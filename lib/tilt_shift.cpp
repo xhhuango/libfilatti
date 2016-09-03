@@ -1,9 +1,11 @@
 #include <filatti/tilt_shift.hpp>
 
-#include <opencv2/opencv.hpp>
-
 #include "gradient/radial.hpp"
 #include "gradient/linear.hpp"
+
+#include <opencv2/opencv.hpp>
+
+#include <memory>
 
 using namespace filatti;
 
@@ -18,7 +20,7 @@ TiltShift::TiltShift()
 TiltShift::~TiltShift() {
 }
 
-bool TiltShift::has_effect() const {
+bool TiltShift::has_effect() const noexcept {
     return _radius != RADIUS_NONE;
 }
 

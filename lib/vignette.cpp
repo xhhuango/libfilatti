@@ -15,7 +15,7 @@ Vignette::Vignette()
 Vignette::~Vignette() {
 }
 
-bool Vignette::has_effect() const {
+bool Vignette::has_effect() const noexcept {
     return _strength != STRENGTH_NONE && _radius != RADIUS_NONE;
 }
 

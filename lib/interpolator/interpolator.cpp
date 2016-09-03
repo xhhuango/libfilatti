@@ -1,6 +1,6 @@
 #include "interpolator.hpp"
 
-using namespace interpolator;
+using namespace filatti::interpolator;
 
 double Interpolator::operator[](const double& x) const {
     return value(x);

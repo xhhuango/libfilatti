@@ -11,7 +11,7 @@ Sharpness::Sharpness() {
 Sharpness::~Sharpness() {
 }
 
-bool Sharpness::has_effect() const {
+bool Sharpness::has_effect() const noexcept {
     return _sharpness != SHARPNESS_NONE;
 }
 

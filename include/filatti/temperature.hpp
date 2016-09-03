@@ -14,7 +14,7 @@ namespace filatti {
         void build_lut();
 
     protected:
-        virtual bool has_effect() const override;
+        virtual bool has_effect() const noexcept override;
 
     public:
         const double TEMPERATURE_MIN = -0.5;

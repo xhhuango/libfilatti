@@ -2,19 +2,19 @@
 #define __FILATTI_CONTRAST_HPP__
 
 #include <filatti/adjustment.hpp>
+#include <filatti/dirty.hpp>
+#include <filatti/synchronous.hpp>
 
 namespace filatti {
-    class Contrast : public Adjustment {
+    class Contrast : public Adjustment, public Dirty, public Synchronous {
     private:
         double _contrast;
         cv::Mat _lut;
 
-        void release_lut();
-
         void build_lut();
 
     protected:
-        virtual bool has_effect() const override;
+        virtual bool has_effect() const noexcept override;
 
     public:
         const double CONTRAST_NONE = 1;
@@ -25,9 +25,9 @@ namespace filatti {
 
         virtual ~Contrast();
 
-        double get_contrast() const;
+        double get_contrast() const noexcept;
 
-        bool set_contrast(double contrast);
+        void set_contrast(double contrast);
 
         virtual bool apply(const cv::Mat& src, cv::Mat& dst) override;
     };

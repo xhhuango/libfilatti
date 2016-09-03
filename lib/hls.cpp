@@ -55,7 +55,7 @@ bool Hls::set_saturation(double saturation) {
     return true;
 }
 
-bool Hls::has_effect() const {
+bool Hls::has_effect() const noexcept {
     return _hue != HUE_NONE || _lightness != LIGHTNESS_NONE || _saturation != SATURATION_NONE;
 }
 

@@ -1,6 +1,6 @@
 #include "radial.hpp"
 
-using namespace gradient;
+using namespace filatti::gradient;
 
 Radial::Radial(double center_x, double center_y, double radius, double feathering, bool is_elliptic)
         : _center_x(center_x), _center_y(center_y), _radius(radius), _feathering(feathering), _is_elliptic(is_elliptic)

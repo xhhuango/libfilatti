@@ -10,7 +10,7 @@ namespace filatti {
         cv::Mat _blurred;
 
     protected:
-        virtual bool has_effect() const override;
+        virtual bool has_effect() const noexcept override;
 
     public:
         const double SHARPNESS_MIN = 0;

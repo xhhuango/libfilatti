@@ -1,7 +1,7 @@
 #include <opencv2/opencv.hpp>
 #include "linear.hpp"
 
-using namespace gradient;
+using namespace filatti::gradient;
 
 Linear::Linear(double center_x, double center_y, double radius, double feathering, double angle)
         : _center_x(center_x), _center_y(center_y), _radius(radius), _feathering(feathering), _angle(angle) {

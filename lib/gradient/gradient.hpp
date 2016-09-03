@@ -3,13 +3,15 @@
 
 #include <opencv2/core.hpp>
 
-namespace gradient {
-    class Gradient {
-    public:
-        virtual ~Gradient() { }
+namespace filatti {
+    namespace gradient {
+        class Gradient {
+        public:
+            virtual ~Gradient() { }
 
-        virtual bool create(cv::Mat& dst) const = 0;
-    };
+            virtual bool create(cv::Mat& dst) const = 0;
+        };
+    }
 }
 
 #endif //__FILATTI_GRADIENT_HPP__

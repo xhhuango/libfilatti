@@ -3,24 +3,26 @@
 
 #include "gradient.hpp"
 
-namespace gradient {
-    class Linear : public Gradient {
-    private:
-        double _center_x;
-        double _center_y;
-        double _radius;
-        double _feathering;
-        double _angle;
+namespace filatti {
+    namespace gradient {
+        class Linear : public Gradient {
+        private:
+            double _center_x;
+            double _center_y;
+            double _radius;
+            double _feathering;
+            double _angle;
 
-        void build_gradient(cv::Mat& gradient, double feathering) const;
+            void build_gradient(cv::Mat& gradient, double feathering) const;
 
-    public:
-        Linear(double center_x, double center_y, double radius, double feathering, double angle);
+        public:
+            Linear(double center_x, double center_y, double radius, double feathering, double angle);
 
-        virtual ~Linear() { }
+            virtual ~Linear() { }
 
-        virtual bool create(cv::Mat& dst) const override;
-    };
+            virtual bool create(cv::Mat& dst) const override;
+        };
+    }
 }
 
 #endif //__FILATTI_LINEAR_HPP__

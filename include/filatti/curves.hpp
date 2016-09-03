@@ -2,9 +2,11 @@
 #define __FILATTI_CURVES_HPP__
 
 #include <filatti/adjustment.hpp>
+#include <filatti/dirty.hpp>
+#include <filatti/synchronous.hpp>
 
 namespace filatti {
-    class Curves : public Adjustment {
+    class Curves : public Adjustment, public Dirty, public Synchronous {
     private:
         std::pair<std::vector<uchar>, std::vector<uchar>> _value_points;
         std::pair<std::vector<uchar>, std::vector<uchar>> _blue_points;
@@ -13,16 +15,12 @@ namespace filatti {
 
         cv::Mat _lut;
 
-        inline bool check_input_points(const std::vector<uchar>& from, const std::vector<uchar>& to) const;
-
-        std::vector<uchar> get_curves(const std::pair<std::vector<uchar>, std::vector<uchar>>& points) const;
-
-        void release_lut();
+        inline void check_input_points(const std::vector<uchar>& from, const std::vector<uchar>& to) const;
 
         void build_lut();
 
     protected:
-        virtual bool has_effect() const override;
+        virtual bool has_effect() const noexcept override;
 
     public:
         const int POINTS_SIZE_MIN = 2;
@@ -37,38 +35,38 @@ namespace filatti {
         /**
          * Value
          */
-        bool set_value_points(std::vector<uchar> from, std::vector<uchar> to);
+        void set_value_points(const std::vector<uchar>& from, const std::vector<uchar>& to);
 
-        std::pair<std::vector<uchar>, std::vector<uchar>> get_value_points() const;
+        std::pair<std::vector<uchar>, std::vector<uchar>> get_value_points() const noexcept;
 
-        std::vector<uchar> get_value_curves() const;
+        std::vector<uchar> get_value_curves() const noexcept;
 
         /**
          * Blue
          */
-        bool set_blue_points(std::vector<uchar> from, std::vector<uchar> to);
+        void set_blue_points(const std::vector<uchar>& from, const std::vector<uchar>& to);
 
-        std::pair<std::vector<uchar>, std::vector<uchar>> get_blue_points() const;
+        std::pair<std::vector<uchar>, std::vector<uchar>> get_blue_points() const noexcept;
 
-        std::vector<uchar> get_blue_curves() const;
+        std::vector<uchar> get_blue_curves() const noexcept;
 
         /**
          * Green
          */
-        bool set_green_points(std::vector<uchar> from, std::vector<uchar> to);
+        void set_green_points(const std::vector<uchar>& from, const std::vector<uchar>& to);
 
-        std::pair<std::vector<uchar>, std::vector<uchar>> get_green_points() const;
+        std::pair<std::vector<uchar>, std::vector<uchar>> get_green_points() const noexcept;
 
-        std::vector<uchar> get_green_curves() const;
+        std::vector<uchar> get_green_curves() const noexcept;
 
         /**
          * Red
          */
-        bool set_red_points(std::vector<uchar> from, std::vector<uchar> to);
+        void set_red_points(const std::vector<uchar>& from, const std::vector<uchar>& to);
 
-        std::pair<std::vector<uchar>, std::vector<uchar>> get_red_points() const;
+        std::pair<std::vector<uchar>, std::vector<uchar>> get_red_points() const noexcept;
 
-        std::vector<uchar> get_red_curves() const;
+        std::vector<uchar> get_red_curves() const noexcept;
 
         virtual bool apply(const cv::Mat& src, cv::Mat& dst) override;
     };

@@ -11,7 +11,7 @@ namespace filatti {
 
     class Adjustment {
     protected:
-        virtual bool has_effect() const = 0;
+        virtual bool has_effect() const noexcept = 0;
 
     public:
         virtual ~Adjustment() { }

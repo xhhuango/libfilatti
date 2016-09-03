@@ -11,7 +11,7 @@ Temperature::Temperature() {
 Temperature::~Temperature() {
 }
 
-bool Temperature::has_effect() const {
+bool Temperature::has_effect() const noexcept {
     return _temperature != TEMPERATURE_NONE;
 }
 

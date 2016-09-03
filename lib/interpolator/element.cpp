@@ -1,6 +1,6 @@
 #include "element.hpp"
 
-using namespace interpolator;
+using namespace filatti::interpolator;
 
 Element::Element(double x) : _x(x) {
 }
