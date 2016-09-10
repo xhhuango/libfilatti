@@ -58,10 +58,6 @@ bool Hls::apply(const cv::Mat& src, cv::Mat& dst) {
     if (!has_effect()) {
         return false;
     } else {
-        if (_lut.empty()) {
-            build_lut();
-        }
-
         synchronize([this] {
             if (make_clean_if_dirty()) {
                 build_lut();

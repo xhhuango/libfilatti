@@ -2,14 +2,14 @@
 #define __FILATTI_TEMPERATURE_HPP__
 
 #include <filatti/adjustment.hpp>
+#include <filatti/dirty.hpp>
+#include <filatti/synchronous.hpp>
 
 namespace filatti {
-    class Temperature : public Adjustment {
+    class Temperature : public Adjustment, public Dirty, public Synchronous {
     private:
         double _temperature;
         cv::Mat _lut;
-
-        void release_lut();
 
         void build_lut();
 
@@ -25,9 +25,9 @@ namespace filatti {
 
         virtual ~Temperature();
 
-        double get_temperature() const;
+        double get_temperature() const noexcept;
 
-        bool set_temperature(double temperature);
+        void set_temperature(double temperature);
 
         virtual bool apply(const cv::Mat& src, cv::Mat& dst) override;
     };

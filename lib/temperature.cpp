@@ -1,10 +1,11 @@
 #include <filatti/temperature.hpp>
+#include <filatti/contract.hpp>
 
 #include <opencv2/imgproc.hpp>
 
 using namespace filatti;
 
-Temperature::Temperature() {
+Temperature::Temperature() : Dirty(true) {
     _temperature = TEMPERATURE_NONE;
 }
 
@@ -15,54 +16,37 @@ bool Temperature::has_effect() const noexcept {
     return _temperature != TEMPERATURE_NONE;
 }
 
-double Temperature::get_temperature() const {
+double Temperature::get_temperature() const noexcept {
     return _temperature;
 }
 
-bool Temperature::set_temperature(double temperature) {
-    if (!within(temperature, TEMPERATURE_MIN, TEMPERATURE_MAX)) {
-        return false;
-    }
-
-    _temperature = temperature;
-    release_lut();
-    return true;
+void Temperature::set_temperature(double temperature) {
+    PRECONDITION(temperature >= TEMPERATURE_MIN && temperature <= TEMPERATURE_MAX, "Temperature is out of range");
+    synchronize([=] {
+        _temperature = temperature;
+        make_dirty();
+    });
 }
 
 bool Temperature::apply(const cv::Mat& src, cv::Mat& dst) {
     if (!has_effect()) {
         return false;
     } else {
-        if (_lut.empty()) {
-            build_lut();
-        }
-
-        cv::Mat orig_y;
-        cv::Mat ycrcb;
-
-        cv::cvtColor(src, ycrcb, cv::COLOR_BGR2YCrCb);
-        cv::extractChannel(ycrcb, orig_y, 0);
-        ycrcb.release();
+        synchronize([this] {
+            if (make_clean_if_dirty()) {
+                build_lut();
+            }
+        });
 
         cv::LUT(src, _lut, dst);
-
-        cv::cvtColor(dst, ycrcb, cv::COLOR_BGR2YCrCb);
-        cv::mixChannels(orig_y, ycrcb, std::vector<int>(0, 0));
-        cv::cvtColor(ycrcb, dst, cv::COLOR_YCrCb2BGR);
-
         return true;
-    }
-}
-
-void Temperature::release_lut() {
-    if (!_lut.empty()) {
-        _lut.release();
     }
 }
 
 void Temperature::build_lut() {
     if (_lut.empty()) {
         _lut.create(256, 1, CV_8UC3);
+        PRECONDITION(_lut.isContinuous(), "Lut is not continuous");
     }
 
     double enhanced_blue = 0;
