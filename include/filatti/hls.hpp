@@ -2,16 +2,16 @@
 #define __FILATTI_BRIGHTNESS_HPP__
 
 #include <filatti/adjustment.hpp>
+#include <filatti/dirty.hpp>
+#include <filatti/synchronous.hpp>
 
 namespace filatti {
-    class Hls : public Adjustment {
+    class Hls : public Adjustment, public Dirty, public Synchronous {
     private:
         int _hue;
         double _lightness;
         double _saturation;
         cv::Mat _lut;
-
-        void release_lut();
 
         void build_lut();
 
@@ -35,17 +35,17 @@ namespace filatti {
 
         virtual ~Hls();
 
-        int get_hue() const;
+        int get_hue() const noexcept;
 
-        bool set_hue(int hue);
+        void set_hue(int hue);
 
-        double get_lightness() const;
+        double get_lightness() const noexcept;
 
-        bool set_lightness(double lightness);
+        void set_lightness(double lightness);
 
-        double get_saturation() const;
+        double get_saturation() const noexcept;
 
-        bool set_saturation(double saturation);
+        void set_saturation(double saturation);
 
         virtual bool apply(const cv::Mat& src, cv::Mat& dst) override;
     };

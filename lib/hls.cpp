@@ -1,10 +1,11 @@
 #include <filatti/hls.hpp>
+#include <filatti/contract.hpp>
 
 #include <opencv2/imgproc.hpp>
 
 using namespace filatti;
 
-Hls::Hls() {
+Hls::Hls() : Dirty(true) {
     _hue = HUE_NONE;
     _lightness = LIGHTNESS_NONE;
     _saturation = SATURATION_NONE;
@@ -13,50 +14,44 @@ Hls::Hls() {
 Hls::~Hls() {
 }
 
-int Hls::get_hue() const {
+bool Hls::has_effect() const noexcept {
+    return _hue != HUE_NONE || _lightness != LIGHTNESS_NONE || _saturation != SATURATION_NONE;
+}
+
+int Hls::get_hue() const noexcept {
     return _hue;
 }
 
-bool Hls::set_hue(int hue) {
-    if (!within(hue, HUE_MIN, HUE_MAX)) {
-        return false;
-    }
-
-    _hue = hue;
-    release_lut();
-    return true;
+void Hls::set_hue(int hue) {
+    PRECONDITION(hue >= HUE_MIN && hue <= HUE_MAX, "Hue is out of range");
+    synchronize([=] {
+        _hue = hue;
+        make_dirty();
+    });
 }
 
-double Hls::get_lightness() const {
+double Hls::get_lightness() const noexcept {
     return _lightness;
 }
 
-bool Hls::set_lightness(double lightness) {
-    if (!within(lightness, LIGHTNESS_MIN, LIGHTNESS_MAX)) {
-        return false;
-    }
-
-    _lightness = lightness;
-    release_lut();
-    return true;
+void Hls::set_lightness(double lightness) {
+    PRECONDITION(lightness >= LIGHTNESS_MIN && lightness <= LIGHTNESS_MAX, "Lightness is out of range");
+    synchronize([=] {
+        _lightness = lightness;
+        make_dirty();
+    });
 }
 
-double Hls::get_saturation() const {
+double Hls::get_saturation() const noexcept {
     return _saturation;
 }
 
-bool Hls::set_saturation(double saturation) {
-    if (!within(saturation, SATURATION_MIN, SATURATION_MAX)) {
-        return false;
-    }
-
-    _saturation = saturation;
-    release_lut();
-    return true;
-}
-
-bool Hls::has_effect() const noexcept {
-    return _hue != HUE_NONE || _lightness != LIGHTNESS_NONE || _saturation != SATURATION_NONE;
+void Hls::set_saturation(double saturation) {
+    PRECONDITION(saturation >= SATURATION_MIN && saturation <= SATURATION_MAX, "Saturation is out of range");
+    synchronize([=] {
+        _saturation = saturation;
+        make_dirty();
+    });
 }
 
 bool Hls::apply(const cv::Mat& src, cv::Mat& dst) {
@@ -67,25 +62,24 @@ bool Hls::apply(const cv::Mat& src, cv::Mat& dst) {
             build_lut();
         }
 
+        synchronize([this] {
+            if (make_clean_if_dirty()) {
+                build_lut();
+            }
+        });
+
         cv::Mat hls;
         cv::cvtColor(src, hls, cv::COLOR_BGR2HLS);
-
         cv::LUT(hls, _lut, hls);
-
         cv::cvtColor(hls, dst, cv::COLOR_HLS2BGR);
         return true;
-    }
-}
-
-void Hls::release_lut() {
-    if (!_lut.empty()) {
-        _lut.release();
     }
 }
 
 void Hls::build_lut() {
     if (_lut.empty()) {
         _lut.create(256, 1, CV_8UC3);
+        PRECONDITION(_lut.isContinuous(), "LUT is not continuous");
     }
 
     int h_shift = _hue / 2;
