@@ -32,7 +32,7 @@ int main() {
 
     cv::namedWindow(WINDOW_NAME, cv::WINDOW_NORMAL);
     cv::createTrackbar(TRACKBAR_NAME, WINDOW_NAME, &trackbar_value, 2000, on_trackbar);
-    on_trackbar(trackbar_value, nullptr);
+    on_trackbar(0, nullptr);
 
     cv::waitKey(0);
     return 0;
