@@ -21,9 +21,9 @@ void on_trackbar(int, void*) {
     vignette.set_feathering(feathering_trackbar_value / 100.0);
     vignette.set_strength(strength_trackbar_value / 100.0);
 
-    std::cout << "Radius=" << radius_trackbar_value
-    << ", Feathering=" << feathering_trackbar_value
-    << ", Strength=" << strength_trackbar_value << std::endl;
+    std::cout << "Radius=" << vignette.get_radius()
+    << ", Feathering=" << vignette.get_feathering()
+    << ", Strength=" << vignette.get_strength() << std::endl;
 
     cv::Mat dst;
     auto before = get_current_milliseconds();

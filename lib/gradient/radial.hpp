@@ -12,20 +12,32 @@ namespace filatti {
             double _radius;
             double _feathering;
             bool _is_elliptic;
+            bool _reserve;
 
-            void create_circle(cv::Mat& dst, int center_x, int center_y, int radius, double feathering) const;
+            void create_circle(cv::Mat& dst,
+                               int center_x,
+                               int center_y,
+                               int radius,
+                               double feathering,
+                               bool reserve) const;
 
             void create_ellipse(cv::Mat& dst,
                                 int center_x,
                                 int center_y,
                                 int radius_width,
                                 int radius_height,
-                                double feathering) const;
+                                double feathering,
+                                bool reserve) const;
 
         public:
-            Radial(double center_x, double center_y, double radius, double feathering, bool is_elliptic);
+            Radial(double center_x,
+                   double center_y,
+                   double radius,
+                   double feathering,
+                   bool is_elliptic,
+                   bool reserve = false);
 
-            virtual ~Radial() { };
+            virtual ~Radial();
 
             virtual bool create(cv::Mat& dst) const override;
         };

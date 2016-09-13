@@ -12,13 +12,19 @@ namespace filatti {
             double _radius;
             double _feathering;
             double _angle;
+            bool _reserve;
 
-            void build_gradient(cv::Mat& gradient, double feathering) const;
+            void build_gradient(cv::Mat& gradient, double feathering, bool reserve) const;
 
         public:
-            Linear(double center_x, double center_y, double radius, double feathering, double angle);
+            Linear(double center_x,
+                   double center_y,
+                   double radius,
+                   double feathering,
+                   double angle,
+                   bool reserve = false);
 
-            virtual ~Linear() { }
+            virtual ~Linear();
 
             virtual bool create(cv::Mat& dst) const override;
         };

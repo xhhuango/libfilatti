@@ -2,9 +2,11 @@
 #define __FILATTI_VIGNETTE_HPP__
 
 #include <filatti/adjustment.hpp>
+#include <filatti/dirty.hpp>
+#include <filatti/synchronous.hpp>
 
 namespace filatti {
-    class Vignette : public Adjustment {
+    class Vignette : public Adjustment, public Dirty, public Synchronous {
     private:
         cv::Point2d _center;
         double _radius;
@@ -15,7 +17,7 @@ namespace filatti {
 
         cv::Mat _mask;
 
-        void create_mask(int rows, int cols);
+        void create_mask(const cv::Size& size);
 
         void blend_vignette(const cv::Mat& src, cv::Mat& dst) const;
 
@@ -42,29 +44,29 @@ namespace filatti {
 
         virtual ~Vignette();
 
-        cv::Point2d get_center() const;
+        cv::Point2d get_center() const noexcept;
 
-        bool set_center(double x, double y);
+        void set_center(const cv::Point2d& center);
 
-        double get_radius() const;
+        double get_radius() const noexcept;
 
-        bool set_radius(double radius);
+        void set_radius(double radius);
 
-        double get_strength() const;
+        double get_strength() const noexcept;
 
-        bool set_strength(double strength);
+        void set_strength(double strength);
 
-        double get_feathering() const;
+        double get_feathering() const noexcept;
 
-        bool set_feathering(double feathering);
+        void set_feathering(double feathering);
 
-        cv::Scalar_<uchar> get_color() const;
+        cv::Scalar_<uchar> get_color() const noexcept;
 
-        bool set_color(cv::Scalar_<uchar> color);
+        void set_color(const cv::Scalar_<uchar>& color);
 
-        bool is_fit_to_image() const;
+        bool is_fit_to_image() const noexcept;
 
-        void set_fit_to_image(bool fit_to_image);
+        void set_fit_to_image(bool fit_to_image) noexcept;
 
         virtual bool apply(const cv::Mat& src, cv::Mat& dst) override;
     };
