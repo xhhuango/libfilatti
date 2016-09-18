@@ -37,12 +37,13 @@ void on_trackbar(int, void*) {
 }
 
 int main() {
-    src = cv::imread(IMAGE_FILE_1);
+    src = cv::imread(IMAGE_FILE_640_360);
 
     cv::namedWindow(WINDOW_NAME, cv::WINDOW_NORMAL);
     cv::createTrackbar(RADIUS_TRACKBAR_NAME, WINDOW_NAME, &radius_trackbar_value, 200, on_trackbar);
     cv::createTrackbar(FEATHERING_TRACKBAR_NAME, WINDOW_NAME, &feathering_trackbar_value, 100, on_trackbar);
     cv::createTrackbar(STRENGTH_TRACKBAR_NAME, WINDOW_NAME, &strength_trackbar_value, 100, on_trackbar);
+    vignette.set_fit_to_image(true);
     on_trackbar(0, nullptr);
 
     cv::waitKey(0);

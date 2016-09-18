@@ -57,7 +57,7 @@ void Radial::create_ellipse(cv::Mat& dst,
                             bool reserve) const {
     double radius_width_pow2 = radius_width * radius_width;
     double radius_height_pow2 = radius_height * radius_height;
-    double feathering_pow2 = radius_width * radius_height * feathering;
+    double feathering_radius = 1 - feathering;
 
     for (int row = 0, height = dst.rows; row < height; ++row) {
         for (int col = 0, width = dst.cols; col < width; ++col) {
@@ -68,16 +68,13 @@ void Radial::create_ellipse(cv::Mat& dst,
 
             double blend;
 
-            double radius_max = radius_height_pow2 * (1 - x_pow2 / radius_width_pow2);
-            if (y_pow2 > radius_max) {
+            double d = std::sqrt((x_pow2 / radius_width_pow2) + (y_pow2 / radius_height_pow2));
+            if (d >= 1) {
                 blend = 0;
+            } else if (d <= feathering_radius) {
+                blend = 1;
             } else {
-                double radius_min = radius_max - feathering_pow2;
-                if (y_pow2 >= radius_min) {
-                    blend = 1 - (y_pow2 - radius_min) / feathering_pow2;
-                } else {
-                    blend = 1;
-                }
+                blend = 1 - (d - feathering_radius) / feathering;
             }
 
             dst.at<uchar>(row, col) = cv::saturate_cast<uchar>(255. * (reserve ? 1.0 - blend : blend));
