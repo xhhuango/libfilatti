@@ -14,7 +14,7 @@ Vignette::~Vignette() {
 }
 
 bool Vignette::has_effect() const noexcept {
-    return _strength != STRENGTH_NONE && _radius != RADIUS_NONE;
+    return !(_strength == STRENGTH_NONE || (_radius == RADIUS_NONE && _feathering == FEATHERING_NONE));
 }
 
 cv::Point2d Vignette::get_center() const noexcept {

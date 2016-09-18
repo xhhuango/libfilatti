@@ -21,8 +21,9 @@ void Radial::create_circle(cv::Mat& dst,
                            double feathering,
                            bool reserve) const {
     double radius_pow2 = radius * radius;
-    double feathering_pow2 = feathering * radius_pow2;
-    double inner_radius_pow2 = radius_pow2 - feathering_pow2;
+    double feathering_width = feathering * radius;
+    double inner_radius = radius - feathering_width;
+    double inner_radius_pow2 = inner_radius * inner_radius;
 
     for (int row = 0, height = dst.rows; row < height; ++row) {
         for (int col = 0, width = dst.cols; col < width; ++col) {
@@ -37,7 +38,7 @@ void Radial::create_circle(cv::Mat& dst,
             if (x_y_pow2 > radius_pow2) {
                 blend = 0;
             } else if (x_y_pow2 > inner_radius_pow2) {
-                blend = 1 - (x_y_pow2 - inner_radius_pow2) / feathering_pow2;
+                blend = 1.0 - (std::sqrt(x_y_pow2) - inner_radius) / feathering_width;
             } else {
                 blend = 1;
             }
