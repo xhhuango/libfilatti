@@ -14,7 +14,7 @@ namespace filatti {
             double _angle;
             bool _reserve;
 
-            void build_gradient(cv::Mat& gradient, double feathering, bool reserve) const;
+            void build_gradient(cv::Mat& gradient, double feathering) const;
 
         public:
             Linear(double center_x,

@@ -24,7 +24,7 @@ cv::Point2d Vignette::get_center() const noexcept {
 void Vignette::set_center(const cv::Point2d& center) {
     PRECONDITION(center.x >= CENTER_MIN && center.x <= CENTER_MAX, "Center X is out of range");
     PRECONDITION(center.y >= CENTER_MIN && center.y <= CENTER_MAX, "Center Y is out of range");
-    synchronize([=] {
+    synchronize([&] {
         _center = center;
         make_dirty();
     });
@@ -92,18 +92,20 @@ bool Vignette::apply(const cv::Mat& src, cv::Mat& dst) {
             }
         });
 
-        blend_vignette(src, dst);
+        blend(src, dst);
         return true;
     }
 }
 
 void Vignette::create_mask(const cv::Size& size) {
-    _mask.create(size, CV_8UC1);
+    if (_mask.empty()) {
+        _mask.create(size, CV_8UC1);
+    }
     gradient::Radial radial(_center.x, _center.y, _radius, _feathering, _fit_to_image, true);
     radial.create(_mask);
 }
 
-void Vignette::blend_vignette(const cv::Mat& src, cv::Mat& dst) const {
+void Vignette::blend(const cv::Mat& src, cv::Mat& dst) const {
     cv::Mat vignette_strength(src.size(), src.type());
     cv::mixChannels(_mask * _strength, vignette_strength, std::vector<int>{0, 0, 0, 1, 0, 2});
 

@@ -30,7 +30,9 @@ bool Sharpness::does_rebuild_blurred() const noexcept {
 }
 
 void Sharpness::set_rebuild_blurred(bool does_rebuild_blurred) noexcept {
-    _does_rebuild_blurred = does_rebuild_blurred;
+    synchronize([=] {
+        _does_rebuild_blurred = does_rebuild_blurred;
+    });
 }
 
 void Sharpness::build_blurred(const cv::Mat& src) {
@@ -41,9 +43,12 @@ bool Sharpness::apply(const cv::Mat& src, cv::Mat& dst) {
     if (!has_effect()) {
         return false;
     } else {
-        if (_does_rebuild_blurred || _blurred.empty()) {
-            build_blurred(src);
-        }
+        synchronize([this, &src] {
+            if (_does_rebuild_blurred || _blurred.empty()) {
+                build_blurred(src);
+                _does_rebuild_blurred = false;
+            }
+        });
         cv::addWeighted(src, 1 + _sharpness, _blurred, -_sharpness, 0, dst);
         return true;
     }

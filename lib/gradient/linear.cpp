@@ -15,7 +15,7 @@ Linear::Linear(double center_x, double center_y, double radius, double featherin
 Linear::~Linear() {
 }
 
-void Linear::build_gradient(cv::Mat& gradient, double feathering, bool reserve) const {
+void Linear::build_gradient(cv::Mat& gradient, double feathering) const {
     int radius = gradient.rows / 2;
     double inner_radius = radius * feathering;
 
@@ -23,9 +23,6 @@ void Linear::build_gradient(cv::Mat& gradient, double feathering, bool reserve) 
     first_col.setTo(255);
     for (int row = 0, rows = first_col.rows; row < inner_radius; ++row) {
         uchar value = cv::saturate_cast<uchar>(255.0 * (row / inner_radius));
-        if (reserve) {
-            value = (uchar) 255 - value;
-        }
         first_col.at<uchar>(row) = value;
         first_col.at<uchar>(rows - row) = value;
     }
@@ -36,12 +33,13 @@ void Linear::build_gradient(cv::Mat& gradient, double feathering, bool reserve) 
 }
 
 bool Linear::create(cv::Mat& dst) const {
-    if (dst.empty() || dst.type() != CV_8UC1)
+    if (dst.empty() || dst.type() != CV_8UC1) {
         return false;
+    }
 
     int width = (int) std::sqrt(std::pow(dst.rows, 2) + std::pow(dst.cols, 2)) * 2;
     cv::Mat gradient((int) (dst.rows * _radius), width, CV_8UC1);
-    build_gradient(gradient, _feathering, _reserve);
+    build_gradient(gradient, _feathering);
 
     cv::Point2f dst_center((float) (dst.cols * _center_x), (float) (dst.rows * _center_y));
     cv::Point2f gradient_center(gradient.cols / 2, gradient.rows / 2);
@@ -50,6 +48,9 @@ bool Linear::create(cv::Mat& dst) const {
     rotate.at<double>(1, 2) += dst_center.y - gradient_center.y;
 
     cv::warpAffine(gradient, dst, rotate, dst.size());
+    if (_reserve) {
+        dst = cv::Scalar_<uchar>(255) - dst;
+    }
 
     return true;
 }
