@@ -9,9 +9,9 @@ namespace filatti {
     class TiltShift : public Adjustment, public Dirty, public Synchronous {
     public:
         enum class MaskType : unsigned int {
-            CIRCULAR,
-            ELLIPTIC,
-            LINEAR,
+            CIRCULAR = 0,
+            ELLIPTIC = 1,
+            LINEAR = 2,
         };
 
     private:
