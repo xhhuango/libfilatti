@@ -4,6 +4,7 @@
 #include "gradient/radial.hpp"
 #include "gradient/linear.hpp"
 
+#include <memory>
 #include <opencv2/opencv.hpp>
 
 using namespace filatti;
