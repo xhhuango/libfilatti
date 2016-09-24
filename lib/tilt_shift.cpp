@@ -9,12 +9,7 @@
 
 using namespace filatti;
 
-TiltShift::TiltShift()
-        : Dirty(true),
-          _center{0.5, 0.5},
-          _angle(0),
-          _mask_type(MaskType::CIRCULAR),
-          _does_rebuild_blurred(false) {
+TiltShift::TiltShift() : Dirty(true), _center{0.5, 0.5}, _angle(0), _mask_type(MaskType::CIRCULAR), _does_rebuild_blurred(true) {
     _radius = RADIUS_NONE;
     _strength = STRENGTH_NONE;
     _feathering = FEATHERING_NONE;
@@ -24,7 +19,7 @@ TiltShift::~TiltShift() {
 }
 
 bool TiltShift::has_effect() const noexcept {
-    return _radius != RADIUS_NONE;
+    return !(_strength == STRENGTH_NONE || (_radius == RADIUS_NONE && _feathering == FEATHERING_NONE));
 }
 
 cv::Point2d TiltShift::get_center() const noexcept {
@@ -110,8 +105,8 @@ void TiltShift::set_rebuild_blurred(bool does_rebuild_blurred) noexcept {
     });
 }
 
-void TiltShift::blur(const cv::Mat& src, cv::Mat& dst) const {
-    cv::GaussianBlur(src, dst, cv::Size(0, 0), 3);
+void TiltShift::blur(const cv::Mat& src) {
+    cv::GaussianBlur(src, _blurred, cv::Size(0, 0), 3);
 }
 
 bool TiltShift::apply(const cv::Mat& src, cv::Mat& dst) {
@@ -123,8 +118,7 @@ bool TiltShift::apply(const cv::Mat& src, cv::Mat& dst) {
                 create_mask(src);
             }
             if (_does_rebuild_blurred || _blurred.empty()) {
-                blur(src, _blurred);
-                _does_rebuild_blurred = false;
+                blur(src);
             }
         });
 

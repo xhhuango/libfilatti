@@ -5,7 +5,7 @@
 
 using namespace filatti;
 
-Sharpness::Sharpness() : Dirty(true), _does_rebuild_blurred(false) {
+Sharpness::Sharpness() : Dirty(true), _does_rebuild_blurred(true) {
     _sharpness = SHARPNESS_NONE;
 }
 
@@ -46,7 +46,6 @@ bool Sharpness::apply(const cv::Mat& src, cv::Mat& dst) {
         synchronize([this, &src] {
             if (_does_rebuild_blurred || _blurred.empty()) {
                 build_blurred(src);
-                _does_rebuild_blurred = false;
             }
         });
         cv::addWeighted(src, 1 + _sharpness, _blurred, -_sharpness, 0, dst);

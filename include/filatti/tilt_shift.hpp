@@ -28,6 +28,8 @@ namespace filatti {
 
         void create_mask(const cv::Mat& src);
 
+        void blur(const cv::Mat& src);
+
         void blend(const cv::Mat& src, cv::Mat& dst) const;
 
     protected:
@@ -83,8 +85,6 @@ namespace filatti {
         void set_rebuild_blurred(bool does_rebuild_blurred) noexcept;
 
         void set_mask_type(MaskType mask_type) noexcept;
-
-        void blur(const cv::Mat& src, cv::Mat& dst) const;
 
         virtual bool apply(const cv::Mat& src, cv::Mat& dst) override;
     };
