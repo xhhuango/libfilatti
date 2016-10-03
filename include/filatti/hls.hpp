@@ -19,17 +19,17 @@ namespace filatti {
         virtual bool has_effect() const noexcept override;
 
     public:
-        const int HUE_NONE = 0;
-        const int HUE_MIN = -180;
-        const int HUE_MAX = 180;
+        static const int HUE_NONE = 0;
+        static const int HUE_MIN = -180;
+        static const int HUE_MAX = 180;
 
-        const double LIGHTNESS_NONE = 0;
-        const double LIGHTNESS_MIN = -1;
-        const double LIGHTNESS_MAX = 1;
+        static constexpr double LIGHTNESS_NONE = 0;
+        static constexpr double LIGHTNESS_MIN = -1;
+        static constexpr double LIGHTNESS_MAX = 1;
 
-        const double SATURATION_NONE = 0;
-        const double SATURATION_MIN = -1;
-        const double SATURATION_MAX = 1;
+        static constexpr double SATURATION_NONE = 0;
+        static constexpr double SATURATION_MIN = -1;
+        static constexpr double SATURATION_MAX = 1;
 
         Hls();
 

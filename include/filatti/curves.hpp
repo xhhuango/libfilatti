@@ -23,8 +23,8 @@ namespace filatti {
         virtual bool has_effect() const noexcept override;
 
     public:
-        const int POINTS_SIZE_MIN = 2;
-        const int POINTS_SIZE_MAX = 256;
+        static const int POINTS_SIZE_MIN = 2;
+        static const int POINTS_SIZE_MAX = 256;
 
         const std::vector<uchar> POINTS_NONE{0, 255};
 

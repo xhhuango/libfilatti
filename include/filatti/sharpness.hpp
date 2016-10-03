@@ -18,9 +18,9 @@ namespace filatti {
         virtual bool has_effect() const noexcept override;
 
     public:
-        const double SHARPNESS_MIN = 0;
-        const double SHARPNESS_MAX = 20;
-        const double SHARPNESS_NONE = SHARPNESS_MIN;
+        static constexpr double SHARPNESS_MIN = 0;
+        static constexpr double SHARPNESS_MAX = 20;
+        static constexpr double SHARPNESS_NONE = SHARPNESS_MIN;
 
         Sharpness();
 

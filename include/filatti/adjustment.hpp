@@ -4,10 +4,13 @@
 #include <opencv2/core.hpp>
 
 namespace filatti {
-    template<typename T>
-    static inline bool within(T value, T min, T max) {
-        return value >= min && value <= max;
-    }
+    using ToneRawType = unsigned int;
+    enum class Tone : ToneRawType {
+        SHADOWS = 0,
+        MIDTONES = 1,
+        HIGHLIGHTS = 2,
+        TOTAL = 3
+    };
 
     class Adjustment {
     protected:

@@ -17,9 +17,9 @@ namespace filatti {
         virtual bool has_effect() const noexcept override;
 
     public:
-        const double CONTRAST_NONE = 1;
-        const double CONTRAST_MIN = 0;
-        const double CONTRAST_MAX = 2;
+        static constexpr double CONTRAST_NONE = 1;
+        static constexpr double CONTRAST_MIN = 0;
+        static constexpr double CONTRAST_MAX = 2;
 
         Contrast();
 

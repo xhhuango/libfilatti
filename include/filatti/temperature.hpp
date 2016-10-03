@@ -17,9 +17,9 @@ namespace filatti {
         virtual bool has_effect() const noexcept override;
 
     public:
-        const double TEMPERATURE_MIN = -0.5;
-        const double TEMPERATURE_MAX = 0.5;
-        const double TEMPERATURE_NONE = 0;
+        static constexpr double TEMPERATURE_MIN = -0.5;
+        static constexpr double TEMPERATURE_MAX = 0.5;
+        static constexpr double TEMPERATURE_NONE = 0;
 
         Temperature();
 

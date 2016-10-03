@@ -25,20 +25,20 @@ namespace filatti {
         virtual bool has_effect() const noexcept override;
 
     public:
-        const double CENTER_MIN = 0;
-        const double CENTER_MAX = 1;
+        static constexpr double CENTER_MIN = 0;
+        static constexpr double CENTER_MAX = 1;
 
-        const double RADIUS_MIN = 0;
-        const double RADIUS_MAX = 2;
-        const double RADIUS_NONE = RADIUS_MAX;
+        static constexpr double RADIUS_MIN = 0;
+        static constexpr double RADIUS_MAX = 2;
+        static constexpr double RADIUS_NONE = RADIUS_MAX;
 
-        const double STRENGTH_MIN = 0;
-        const double STRENGTH_MAX = 1;
-        const double STRENGTH_NONE = STRENGTH_MIN;
+        static constexpr double STRENGTH_MIN = 0;
+        static constexpr double STRENGTH_MAX = 1;
+        static constexpr double STRENGTH_NONE = STRENGTH_MIN;
 
-        const double FEATHERING_MIN = 0;
-        const double FEATHERING_MAX = 1;
-        const double FEATHERING_NONE = FEATHERING_MIN;
+        static constexpr double FEATHERING_MIN = 0;
+        static constexpr double FEATHERING_MAX = 1;
+        static constexpr double FEATHERING_NONE = FEATHERING_MIN;
 
         Vignette();
 
