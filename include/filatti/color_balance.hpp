@@ -27,6 +27,8 @@ namespace filatti {
 
         cv::Mat _lut;
 
+        void compute(int add[TONES], int sub1[TONES], int sub2[TONES], int res[TONES]);
+
         void build_add_sub_luts();
 
         void build_lut();

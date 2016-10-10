@@ -1,6 +1,8 @@
 #include <filatti/color_balance.hpp>
 #include <filatti/contract.hpp>
 
+#include <opencv2/imgproc.hpp>
+
 using namespace filatti;
 
 ColorBalance::ColorBalance() : Dirty(true), _is_add_sub_built(false) {
@@ -120,20 +122,26 @@ void ColorBalance::build_lut() {
         PRECONDITION(_lut.isContinuous(), "LUT is not continuous");
     }
 
+    int blue_yellow[TONES];
+    compute(_blue_yellow, _green_magenta, _red_cyan, blue_yellow);
     cv::Mat* blue_yellow_transfers[TONES];
-    blue_yellow_transfers[SHADOWS] = _blue_yellow[SHADOWS] > 0 ? &_shadows_add_lut : &_shadows_sub_lut;
-    blue_yellow_transfers[MIDTONES] = _blue_yellow[MIDTONES] > 0 ? &_midtones_add_lut : &_midtones_sub_lut;
-    blue_yellow_transfers[HIGHLIGHTS] = _blue_yellow[HIGHLIGHTS] > 0 ? &_highlights_add_lut : &_highlights_sub_lut;
+    blue_yellow_transfers[SHADOWS] = blue_yellow[SHADOWS] > 0 ? &_shadows_add_lut : &_shadows_sub_lut;
+    blue_yellow_transfers[MIDTONES] = blue_yellow[MIDTONES] > 0 ? &_midtones_add_lut : &_midtones_sub_lut;
+    blue_yellow_transfers[HIGHLIGHTS] = blue_yellow[HIGHLIGHTS] > 0 ? &_highlights_add_lut : &_highlights_sub_lut;
 
+    int green_magenta[TONES];
+    compute(_green_magenta, _blue_yellow, _red_cyan, green_magenta);
     cv::Mat* green_magenta_transfers[TONES];
-    green_magenta_transfers[SHADOWS] = _green_magenta[SHADOWS] > 0 ? &_shadows_add_lut : &_shadows_sub_lut;
-    green_magenta_transfers[MIDTONES] = _green_magenta[MIDTONES] > 0 ? &_midtones_add_lut : &_midtones_sub_lut;
-    green_magenta_transfers[HIGHLIGHTS] = _green_magenta[HIGHLIGHTS] > 0 ? &_highlights_add_lut : &_highlights_sub_lut;
+    green_magenta_transfers[SHADOWS] = green_magenta[SHADOWS] > 0 ? &_shadows_add_lut : &_shadows_sub_lut;
+    green_magenta_transfers[MIDTONES] = green_magenta[MIDTONES] > 0 ? &_midtones_add_lut : &_midtones_sub_lut;
+    green_magenta_transfers[HIGHLIGHTS] = green_magenta[HIGHLIGHTS] > 0 ? &_highlights_add_lut : &_highlights_sub_lut;
 
+    int red_cyan[TONES];
+    compute(_red_cyan, _blue_yellow, _green_magenta, red_cyan);
     cv::Mat* red_cyan_transfers[TONES];
-    red_cyan_transfers[SHADOWS] = _red_cyan[SHADOWS] > 0 ? &_shadows_add_lut : &_shadows_sub_lut;
-    red_cyan_transfers[MIDTONES] = _red_cyan[MIDTONES] > 0 ? &_midtones_add_lut : &_midtones_sub_lut;
-    red_cyan_transfers[HIGHLIGHTS] = _red_cyan[HIGHLIGHTS] > 0 ? &_highlights_add_lut : &_highlights_sub_lut;
+    red_cyan_transfers[SHADOWS] = red_cyan[SHADOWS] > 0 ? &_shadows_add_lut : &_shadows_sub_lut;
+    red_cyan_transfers[MIDTONES] = red_cyan[MIDTONES] > 0 ? &_midtones_add_lut : &_midtones_sub_lut;
+    red_cyan_transfers[HIGHLIGHTS] = red_cyan[HIGHLIGHTS] > 0 ? &_highlights_add_lut : &_highlights_sub_lut;
 
     for (int i = 0; i < 256; ++i) {
         uchar b = (uchar) i;
@@ -141,14 +149,20 @@ void ColorBalance::build_lut() {
         uchar r = (uchar) i;
 
         for (int tone = 0; tone < TONES; ++tone) {
-            b = cv::saturate_cast<float>(
-                    (float) b + (float) _blue_yellow[tone] * blue_yellow_transfers[tone]->at<float>(b, 0));
-            g = cv::saturate_cast<float>(
-                    (float) g + (float) _green_magenta[tone] * green_magenta_transfers[tone]->at<float>(g, 0));
-            r = cv::saturate_cast<float>(
-                    (float) r + (float) _red_cyan[tone] * red_cyan_transfers[tone]->at<float>(r, 0));
+            b = cv::saturate_cast<uchar>(
+                    (float) b + (float) blue_yellow[tone] * blue_yellow_transfers[tone]->at<float>(b, 0));
+            g = cv::saturate_cast<uchar>(
+                    (float) g + (float) green_magenta[tone] * green_magenta_transfers[tone]->at<float>(g, 0));
+            r = cv::saturate_cast<uchar>(
+                    (float) r + (float) red_cyan[tone] * red_cyan_transfers[tone]->at<float>(r, 0));
         }
 
         _lut.at<cv::Vec3b>(i, 0) = cv::Vec3b{b, g, r};
     }
+}
+
+void ColorBalance::compute(int add[TONES], int sub1[TONES], int sub2[TONES], int res[TONES]) {
+    res[SHADOWS] = add[SHADOWS] - sub1[SHADOWS] - sub2[SHADOWS];
+    res[MIDTONES] = add[MIDTONES] - sub1[MIDTONES] - sub2[MIDTONES];
+    res[HIGHLIGHTS] = add[HIGHLIGHTS] - sub1[HIGHLIGHTS] - sub2[HIGHLIGHTS];
 }
