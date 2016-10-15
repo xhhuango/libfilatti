@@ -34,3 +34,6 @@ target_link_libraries(radial_gradient_test filatti)
 
 add_executable(color_balance_test color_balance_test.cpp)
 target_link_libraries(color_balance_test filatti)
+
+add_executable(highlight_shadow_test highlight_shadow_test.cpp)
+target_link_libraries(highlight_shadow_test filatti)

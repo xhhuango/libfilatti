@@ -18,6 +18,7 @@ set(SOURCE_FILES
         curves.cpp
         tilt_shift.cpp
         color_balance.cpp
+        highlight_shadow.cpp
         )
 
 add_library(filatti ${SOURCE_FILES})
