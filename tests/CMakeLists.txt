@@ -37,3 +37,6 @@ target_link_libraries(color_balance_test filatti)
 
 add_executable(highlight_shadow_test highlight_shadow_test.cpp)
 target_link_libraries(highlight_shadow_test filatti)
+
+add_executable(white_balance_test white_balance_test.cpp)
+target_link_libraries(white_balance_test filatti)

@@ -19,6 +19,7 @@ set(SOURCE_FILES
         tilt_shift.cpp
         color_balance.cpp
         highlight_shadow.cpp
+        white_balance.cpp
         )
 
 add_library(filatti ${SOURCE_FILES})
