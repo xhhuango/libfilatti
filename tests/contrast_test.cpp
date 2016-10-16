@@ -15,6 +15,8 @@ int trackbar_value = (int) (contrast.get_contrast() * 100);
 void on_trackbar(int, void*) {
     contrast.set_contrast(trackbar_value / 100.0);
 
+    std::cout << "Contrast=" << contrast.get_contrast() << std::endl;
+
     cv::Mat dst;
     auto before = get_current_milliseconds();
     if (!contrast.apply(src, dst))

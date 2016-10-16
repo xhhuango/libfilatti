@@ -5,8 +5,7 @@
 
 using namespace filatti;
 
-Temperature::Temperature() : Dirty(true) {
-    _temperature = TEMPERATURE_NONE;
+Temperature::Temperature() : Dirty(true), _temperature(TEMPERATURE_NONE) {
 }
 
 Temperature::~Temperature() {

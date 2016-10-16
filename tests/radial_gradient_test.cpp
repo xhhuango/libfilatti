@@ -12,7 +12,7 @@ int main() {
 
     auto before = get_current_milliseconds();
 
-    gradient::Radial radial(0.5, 0.5, 0.6, 0.8, true);
+    filatti::gradient::Radial radial(0.5, 0.5, 0.6, 0.8, true);
     radial.create(dst);
 
     auto after = get_current_milliseconds();

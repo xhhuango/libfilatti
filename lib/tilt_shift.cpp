@@ -9,10 +9,14 @@
 
 using namespace filatti;
 
-TiltShift::TiltShift() : Dirty(true), _center{0.5, 0.5}, _angle(0), _mask_type(MaskType::CIRCULAR), _does_rebuild_blurred(true) {
-    _radius = RADIUS_NONE;
-    _strength = STRENGTH_NONE;
-    _feathering = FEATHERING_NONE;
+TiltShift::TiltShift() : Dirty(true),
+                         _center{0.5, 0.5},
+                         _angle(ANGLE_MIN),
+                         _mask_type(MaskType::CIRCULAR),
+                         _does_rebuild_blurred(true),
+                         _radius(RADIUS_NONE),
+                         _strength(STRENGTH_NONE),
+                         _feathering(FEATHERING_NONE) {
 }
 
 TiltShift::~TiltShift() {

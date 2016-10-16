@@ -5,10 +5,7 @@
 
 using namespace filatti;
 
-Hls::Hls() : Dirty(true) {
-    _hue = HUE_NONE;
-    _lightness = LIGHTNESS_NONE;
-    _saturation = SATURATION_NONE;
+Hls::Hls() : Dirty(true), _hue(HUE_NONE), _lightness(LIGHTNESS_NONE), _saturation(SATURATION_NONE) {
 }
 
 Hls::~Hls() {

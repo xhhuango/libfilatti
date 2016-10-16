@@ -5,12 +5,11 @@
 
 using namespace filatti;
 
-HighlightShadow::HighlightShadow() : Dirty(true) {
-    _shadow_amount = AMOUNT_NONE;
-    _highlight_amount = AMOUNT_NONE;
-
-    _shadow_tone_width = TONE_WIDTH_MAX;
-    _highlight_tone_width = TONE_WIDTH_MAX;
+HighlightShadow::HighlightShadow() : Dirty(true),
+                                     _shadow_amount(AMOUNT_NONE),
+                                     _shadow_tone_width(TONE_WIDTH_MAX),
+                                     _highlight_amount(AMOUNT_NONE),
+                                     _highlight_tone_width(TONE_WIDTH_MAX) {
 }
 
 HighlightShadow::~HighlightShadow() {

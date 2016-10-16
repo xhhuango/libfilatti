@@ -4,10 +4,13 @@
 
 using namespace filatti;
 
-Vignette::Vignette() : Dirty(true), _center{0.5, 0.5}, _color{0, 0, 0}, _fit_to_image(true) {
-    _radius = RADIUS_NONE;
-    _strength = STRENGTH_NONE;
-    _feathering = FEATHERING_NONE;
+Vignette::Vignette() : Dirty(true),
+                       _center{0.5, 0.5},
+                       _color{0, 0, 0},
+                       _fit_to_image(true),
+                       _radius(RADIUS_NONE),
+                       _strength(STRENGTH_NONE),
+                       _feathering(FEATHERING_NONE) {
 }
 
 Vignette::~Vignette() {

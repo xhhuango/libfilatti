@@ -3,8 +3,7 @@
 
 using namespace filatti;
 
-Contrast::Contrast() : Dirty(true) {
-    _contrast = CONTRAST_NONE;
+Contrast::Contrast() : Dirty(true), _contrast(CONTRAST_NONE) {
 }
 
 Contrast::~Contrast() {

@@ -15,7 +15,7 @@ int temperature_trackbar_value = (int) (temperature.get_temperature() * 100. + 5
 void on_trackbar(int, void*) {
     temperature.set_temperature((temperature_trackbar_value - 50) / 100.);
 
-    std::cout << "temperature=" << temperature.get_temperature() << std::endl;
+    std::cout << "Temperature=" << temperature.get_temperature() << std::endl;
 
     cv::Mat dst;
     auto before = get_current_milliseconds();

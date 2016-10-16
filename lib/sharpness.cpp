@@ -5,8 +5,7 @@
 
 using namespace filatti;
 
-Sharpness::Sharpness() : Dirty(true), _does_rebuild_blurred(true) {
-    _sharpness = SHARPNESS_NONE;
+Sharpness::Sharpness() : Dirty(true), _does_rebuild_blurred(true), _sharpness(SHARPNESS_NONE) {
 }
 
 Sharpness::~Sharpness() {

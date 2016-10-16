@@ -21,6 +21,11 @@ void on_trackbar(int, void*) {
     hls.set_lightness((l_trackbar_value - 100) / 100.0);
     hls.set_saturation((s_trackbar_value - 100) / 100.0);
 
+    std::cout << "HUE=" << hls.get_hue()
+    << ", Lightness=" << hls.get_lightness()
+    << ", Saturation=" << hls.get_saturation()
+    << std::endl;
+
     cv::Mat dst;
     auto before = get_current_milliseconds();
     if (!hls.apply(src, dst))

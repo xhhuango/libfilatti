@@ -15,7 +15,7 @@ int trackbar_value = (int) (sharpness.get_sharpness() * 100);
 void on_trackbar(int, void*) {
     sharpness.set_sharpness(trackbar_value / 100.0);
 
-    std::cout << "Sharpness: " << trackbar_value << std::endl;
+    std::cout << "Sharpness=" << trackbar_value << std::endl;
 
     cv::Mat dst;
     auto before = get_current_milliseconds();
