@@ -2,11 +2,10 @@
 #define __FILATTI_WHITE_BALANCE_HPP__
 
 #include <filatti/adjustment.hpp>
-#include <filatti/dirty.hpp>
 #include <filatti/synchronous.hpp>
 
 namespace filatti {
-    class WhiteBalance : public Adjustment, public Dirty, public Synchronous {
+    class WhiteBalance : public Adjustment, public Synchronous {
     private:
         double _percent;
 

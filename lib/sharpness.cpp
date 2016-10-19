@@ -5,7 +5,7 @@
 
 using namespace filatti;
 
-Sharpness::Sharpness() : Dirty(true), _does_rebuild_blurred(true), _sharpness(SHARPNESS_NONE) {
+Sharpness::Sharpness() : Rebuild(true), _sharpness(SHARPNESS_NONE) {
 }
 
 Sharpness::~Sharpness() {
@@ -24,13 +24,9 @@ void Sharpness::set_sharpness(double sharpness) {
     _sharpness = sharpness;
 }
 
-bool Sharpness::does_rebuild_blurred() const noexcept {
-    return _does_rebuild_blurred;
-}
-
 void Sharpness::set_rebuild_blurred(bool does_rebuild_blurred) noexcept {
     synchronize([=] {
-        _does_rebuild_blurred = does_rebuild_blurred;
+        set_rebuild(does_rebuild_blurred);
     });
 }
 
@@ -43,7 +39,7 @@ bool Sharpness::apply(const cv::Mat& src, cv::Mat& dst) {
         return false;
     } else {
         synchronize([this, &src] {
-            if (_does_rebuild_blurred || _blurred.empty()) {
+            if (does_rebuild() || _blurred.empty()) {
                 build_blurred(src);
             }
         });

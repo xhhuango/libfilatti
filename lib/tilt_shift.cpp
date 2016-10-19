@@ -10,10 +10,10 @@
 using namespace filatti;
 
 TiltShift::TiltShift() : Dirty(true),
+                         Rebuild(true),
                          _center{0.5, 0.5},
                          _angle(ANGLE_MIN),
                          _mask_type(MaskType::CIRCULAR),
-                         _does_rebuild_blurred(true),
                          _radius(RADIUS_NONE),
                          _strength(STRENGTH_NONE),
                          _feathering(FEATHERING_NONE) {
@@ -99,13 +99,9 @@ void TiltShift::set_mask_type(TiltShift::MaskType mask_type) noexcept {
     });
 }
 
-bool TiltShift::does_rebuild_blurred() const noexcept {
-    return _does_rebuild_blurred;
-}
-
 void TiltShift::set_rebuild_blurred(bool does_rebuild_blurred) noexcept {
     synchronize([=] {
-        _does_rebuild_blurred = does_rebuild_blurred;
+        set_rebuild(does_rebuild_blurred);
     });
 }
 
@@ -121,7 +117,7 @@ bool TiltShift::apply(const cv::Mat& src, cv::Mat& dst) {
             if (make_clean_if_dirty()) {
                 create_mask(src);
             }
-            if (_does_rebuild_blurred || _blurred.empty()) {
+            if (does_rebuild() || _blurred.empty()) {
                 blur(src);
             }
         });

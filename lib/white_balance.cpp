@@ -5,7 +5,7 @@
 
 using namespace filatti;
 
-WhiteBalance::WhiteBalance() : Dirty(true), _percent(PERCENT_NONE) {
+WhiteBalance::WhiteBalance() : _percent(PERCENT_NONE) {
 }
 
 WhiteBalance::~WhiteBalance() {
@@ -23,7 +23,6 @@ void WhiteBalance::set_percent(double percent) {
     PRECONDITION(percent >= PERCENT_MIN && percent <= PERCENT_MAX, "Percent is out of range");
     synchronize([=] {
         _percent = percent;
-        make_dirty();
     });
 }
 
@@ -31,12 +30,7 @@ bool WhiteBalance::apply(const cv::Mat& src, cv::Mat& dst) {
     if (!has_effect()) {
         return false;
     } else {
-        synchronize([this, &src] {
-            if (make_clean_if_dirty()) {
-                build_lut(src);
-            }
-        });
-
+        build_lut(src);
         cv::LUT(src, _lut, dst);
         return true;
     }

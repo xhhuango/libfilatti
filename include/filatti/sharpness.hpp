@@ -2,14 +2,13 @@
 #define __FILATTI_SHARPNESS_HPP__
 
 #include <filatti/adjustment.hpp>
-#include <filatti/dirty.hpp>
+#include <filatti/rebuild.hpp>
 #include <filatti/synchronous.hpp>
 
 namespace filatti {
-    class Sharpness : public Adjustment, public Dirty, public Synchronous {
+    class Sharpness : public Adjustment, public Rebuild, public Synchronous {
     private:
         double _sharpness;
-        bool _does_rebuild_blurred;
         cv::Mat _blurred;
 
         void build_blurred(const cv::Mat& src);
@@ -29,8 +28,6 @@ namespace filatti {
         double get_sharpness() const noexcept;
 
         void set_sharpness(double sharpness);
-
-        bool does_rebuild_blurred() const noexcept;
 
         void set_rebuild_blurred(bool does_rebuild_blurred) noexcept;
 

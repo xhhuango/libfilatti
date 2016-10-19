@@ -21,11 +21,7 @@ namespace filatti {
         }
 
     public:
-        virtual ~Dirty() { };
-
-        inline bool is_dirty() const noexcept {
-            return _dirty;
-        };
+        virtual ~Dirty() { }
     };
 }
 

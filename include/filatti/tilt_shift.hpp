@@ -3,10 +3,11 @@
 
 #include <filatti/adjustment.hpp>
 #include <filatti/dirty.hpp>
+#include <filatti/rebuild.hpp>
 #include <filatti/synchronous.hpp>
 
 namespace filatti {
-    class TiltShift : public Adjustment, public Dirty, public Synchronous {
+    class TiltShift : public Adjustment, public Dirty, public Rebuild, public Synchronous {
     public:
         enum class MaskType : unsigned int {
             CIRCULAR = 0,
@@ -21,7 +22,6 @@ namespace filatti {
         double _feathering;
         double _angle;
         MaskType _mask_type;
-        bool _does_rebuild_blurred;
 
         cv::Mat _mask;
         cv::Mat _blurred;
@@ -79,8 +79,6 @@ namespace filatti {
         void set_angle(double angle);
 
         MaskType get_mask_type() const noexcept;
-
-        bool does_rebuild_blurred() const noexcept;
 
         void set_rebuild_blurred(bool does_rebuild_blurred) noexcept;
 
