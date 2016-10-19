@@ -30,7 +30,9 @@ bool WhiteBalance::apply(const cv::Mat& src, cv::Mat& dst) {
     if (!has_effect()) {
         return false;
     } else {
-        build_lut(src);
+        synchronize([this, &src] {
+            build_lut(src);
+        });
         cv::LUT(src, _lut, dst);
         return true;
     }
@@ -38,7 +40,7 @@ bool WhiteBalance::apply(const cv::Mat& src, cv::Mat& dst) {
 
 void WhiteBalance::build_lut(const cv::Mat& src) {
     if (_lut.empty()) {
-        _lut.create(256, 1, CV_8UC1);
+        _lut.create(256, 1, CV_8UC3);
         PRECONDITION(_lut.isContinuous(), "LUT is not continuous");
     }
 
