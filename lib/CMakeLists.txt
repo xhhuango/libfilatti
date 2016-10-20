@@ -20,6 +20,7 @@ set(SOURCE_FILES
         color_balance.cpp
         highlight_shadow.cpp
         white_balance.cpp
+        vibrance.cpp
         )
 
 add_library(filatti ${SOURCE_FILES})

@@ -40,3 +40,6 @@ target_link_libraries(highlight_shadow_test filatti)
 
 add_executable(white_balance_test white_balance_test.cpp)
 target_link_libraries(white_balance_test filatti)
+
+add_executable(vibrance_test vibrance_test.cpp)
+target_link_libraries(vibrance_test filatti)
