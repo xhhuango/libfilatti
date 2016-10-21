@@ -7,7 +7,7 @@
 namespace filatti {
     class Vibrance : public Adjustment, public Synchronous {
     private:
-        double _vibrance;
+        float _vibrance;
 
         void blend(const cv::Mat& src, cv::Mat& dst) const;
 
@@ -15,17 +15,17 @@ namespace filatti {
         virtual bool has_effect() const noexcept override;
 
     public:
-        static constexpr double VIBRANCE_MAX = 3;
-        static constexpr double VIBRANCE_MIN = -2;
-        static constexpr double VIBRANCE_NONE = 0;
+        static constexpr float VIBRANCE_MAX = 3;
+        static constexpr float VIBRANCE_MIN = -2;
+        static constexpr float VIBRANCE_NONE = 0;
 
         Vibrance();
 
         ~Vibrance();
 
-        double get_vibrance() const noexcept;
+        float get_vibrance() const noexcept;
 
-        void set_vibrance(double vibrance);
+        void set_vibrance(float vibrance);
 
         virtual bool apply(const cv::Mat& src, cv::Mat& dst) override;
     };

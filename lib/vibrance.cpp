@@ -13,11 +13,11 @@ bool Vibrance::has_effect() const noexcept {
     return _vibrance != VIBRANCE_NONE;
 }
 
-double Vibrance::get_vibrance() const noexcept {
+float Vibrance::get_vibrance() const noexcept {
     return _vibrance;
 }
 
-void Vibrance::set_vibrance(double vibrance) {
+void Vibrance::set_vibrance(float vibrance) {
     PRECONDITION(vibrance >= VIBRANCE_MIN && vibrance <= VIBRANCE_MAX, "Vibrance is out of range");
     synchronize([=] {
         _vibrance = vibrance;
@@ -39,19 +39,21 @@ bool Vibrance::apply(const cv::Mat& src, cv::Mat& dst) {
 }
 
 void Vibrance::blend(const cv::Mat& src, cv::Mat& dst) const {
+    long col_end_offset = src.cols * src.channels();
+
     for (int row = 0, rows = src.rows; row < rows; ++row) {
         const uchar* p_src_col = src.ptr<uchar>(row);
-        const uchar* p_src_col_end = p_src_col + src.cols * src.channels();
+        const uchar* p_src_col_end = p_src_col + col_end_offset;
         uchar* p_dst = dst.ptr<uchar>(row);
 
         while (p_src_col < p_src_col_end) {
-            double b = (double) *p_src_col++;
-            double g = (double) *p_src_col++;
-            double r = (double) *p_src_col++;
+            float b = float(*p_src_col++);
+            float g = float(*p_src_col++);
+            float r = float(*p_src_col++);
 
-            double average = (b + g + r) / 3.0;
-            double max = std::max(std::max(b, g), r);
-            double adjust = (max - average) / 127.0 * _vibrance;
+            float average = (b + g + r) / 3.0f;
+            float max = std::max(std::max(b, g), r);
+            float adjust = (max - average) / 127.0f * _vibrance;
 
             if (b != max) {
                 b -= (max - b) * adjust;
