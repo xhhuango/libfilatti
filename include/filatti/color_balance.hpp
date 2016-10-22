@@ -17,7 +17,7 @@ namespace filatti {
         int _green_magenta[TONES];
         int _blue_yellow[TONES];
 
-        bool _is_add_sub_built;
+        bool _is_add_sub_lut_built;
         cv::Mat _shadows_add_lut;
         cv::Mat _shadows_sub_lut;
         cv::Mat _midtones_add_lut;

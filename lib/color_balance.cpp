@@ -5,7 +5,7 @@
 
 using namespace filatti;
 
-ColorBalance::ColorBalance() : Dirty(true), _is_add_sub_built(false) {
+ColorBalance::ColorBalance() : Dirty(true), _is_add_sub_lut_built(false) {
     for (int i = 0; i < TONES; ++i) {
         _red_cyan[i] = VALUE_NONE;
         _green_magenta[i] = VALUE_NONE;
@@ -67,7 +67,7 @@ bool ColorBalance::apply(const cv::Mat& src, cv::Mat& dst) {
     } else {
         synchronize([this] {
             if (make_clean_if_dirty()) {
-                if (!_is_add_sub_built) {
+                if (!_is_add_sub_lut_built) {
                     build_add_sub_luts();
                 }
                 build_lut();
@@ -99,65 +99,88 @@ void ColorBalance::build_add_sub_luts() {
         _highlights_sub_lut.create(256, 1, CV_32FC1);
     }
 
-    for (int i = 0; i < 256; ++i) {
+    float* p_shadows_add_lut = _shadows_add_lut.ptr<float>(0);
+    float* p_shadows_sub_lut = _shadows_sub_lut.ptr<float>(0);
+    float* p_highlights_add_lut = _highlights_add_lut.ptr<float>(0);
+    float* p_highlights_sub_lut = _highlights_sub_lut.ptr<float>(0);
+    float* p_midtones_add_lut = _midtones_add_lut.ptr<float>(0);
+    float* p_midtones_sub_lut = _midtones_sub_lut.ptr<float>(0);
+    for (int i = 0, j = 255; i < 256; ++i, --j) {
         float sh = 1.075f - 1.0f / ((float) i / 16.0f + 1.0f);
 
         float m = ((float) i - 127.0f) / 127.0f;
         m = 0.667f * (1.0f - m * m);
 
-        _shadows_add_lut.at<float>(i, 0) = sh;
-        _shadows_sub_lut.at<float>(255 - i, 0) = sh;
-        _highlights_add_lut.at<float>(255 - i, 0) = sh;
-        _highlights_sub_lut.at<float>(i, 0) = sh;
-        _midtones_add_lut.at<float>(i, 0) = m;
-        _midtones_sub_lut.at<float>(i, 0) = m;
+        p_shadows_add_lut[i] = sh;
+        p_shadows_sub_lut[j] = sh;
+        p_highlights_add_lut[j] = sh;
+        p_highlights_sub_lut[i] = sh;
+        p_midtones_add_lut[i] = m;
+        p_midtones_sub_lut[i] = m;
     }
 
-    _is_add_sub_built = true;
+    _is_add_sub_lut_built = true;
 }
 
 void ColorBalance::build_lut() {
     if (_lut.empty()) {
         _lut.create(256, 1, CV_8UC3);
-        PRECONDITION(_lut.isContinuous(), "LUT is not continuous");
     }
 
     int blue_yellow[TONES];
+    float* p_blue_yellow_luts[TONES];
     compute(_blue_yellow, _green_magenta, _red_cyan, blue_yellow);
-    cv::Mat* blue_yellow_transfers[TONES];
-    blue_yellow_transfers[SHADOWS] = blue_yellow[SHADOWS] > 0 ? &_shadows_add_lut : &_shadows_sub_lut;
-    blue_yellow_transfers[MIDTONES] = blue_yellow[MIDTONES] > 0 ? &_midtones_add_lut : &_midtones_sub_lut;
-    blue_yellow_transfers[HIGHLIGHTS] = blue_yellow[HIGHLIGHTS] > 0 ? &_highlights_add_lut : &_highlights_sub_lut;
+    p_blue_yellow_luts[SHADOWS] = blue_yellow[SHADOWS] > 0
+                                  ? _shadows_add_lut.ptr<float>(0)
+                                  : _shadows_sub_lut.ptr<float>(0);
+    p_blue_yellow_luts[MIDTONES] = blue_yellow[MIDTONES] > 0
+                                   ? _midtones_add_lut.ptr<float>(0)
+                                   : _midtones_sub_lut.ptr<float>(0);
+    p_blue_yellow_luts[HIGHLIGHTS] = blue_yellow[HIGHLIGHTS] > 0
+                                     ? _highlights_add_lut.ptr<float>(0)
+                                     : _highlights_sub_lut.ptr<float>(0);
 
     int green_magenta[TONES];
     compute(_green_magenta, _blue_yellow, _red_cyan, green_magenta);
-    cv::Mat* green_magenta_transfers[TONES];
-    green_magenta_transfers[SHADOWS] = green_magenta[SHADOWS] > 0 ? &_shadows_add_lut : &_shadows_sub_lut;
-    green_magenta_transfers[MIDTONES] = green_magenta[MIDTONES] > 0 ? &_midtones_add_lut : &_midtones_sub_lut;
-    green_magenta_transfers[HIGHLIGHTS] = green_magenta[HIGHLIGHTS] > 0 ? &_highlights_add_lut : &_highlights_sub_lut;
+    float* p_green_magenta_luts[TONES];
+    p_green_magenta_luts[SHADOWS] = green_magenta[SHADOWS] > 0
+                                    ? _shadows_add_lut.ptr<float>(0)
+                                    : _shadows_sub_lut.ptr<float>(0);
+    p_green_magenta_luts[MIDTONES] = green_magenta[MIDTONES] > 0
+                                     ? _midtones_add_lut.ptr<float>(0)
+                                     : _midtones_sub_lut.ptr<float>(0);
+    p_green_magenta_luts[HIGHLIGHTS] = green_magenta[HIGHLIGHTS] > 0
+                                       ? _highlights_add_lut.ptr<float>(0)
+                                       : _highlights_sub_lut.ptr<float>(0);
 
     int red_cyan[TONES];
     compute(_red_cyan, _blue_yellow, _green_magenta, red_cyan);
-    cv::Mat* red_cyan_transfers[TONES];
-    red_cyan_transfers[SHADOWS] = red_cyan[SHADOWS] > 0 ? &_shadows_add_lut : &_shadows_sub_lut;
-    red_cyan_transfers[MIDTONES] = red_cyan[MIDTONES] > 0 ? &_midtones_add_lut : &_midtones_sub_lut;
-    red_cyan_transfers[HIGHLIGHTS] = red_cyan[HIGHLIGHTS] > 0 ? &_highlights_add_lut : &_highlights_sub_lut;
+    float* p_red_cyan_luts[TONES];
+    p_red_cyan_luts[SHADOWS] = red_cyan[SHADOWS] > 0
+                               ? _shadows_add_lut.ptr<float>(0)
+                               : _shadows_sub_lut.ptr<float>(0);
+    p_red_cyan_luts[MIDTONES] = red_cyan[MIDTONES] > 0
+                                ? _midtones_add_lut.ptr<float>(0)
+                                : _midtones_sub_lut.ptr<float>(0);
+    p_red_cyan_luts[HIGHLIGHTS] = red_cyan[HIGHLIGHTS] > 0
+                                  ? _highlights_add_lut.ptr<float>(0)
+                                  : _highlights_sub_lut.ptr<float>(0);
 
+    uchar* p_lut = _lut.ptr<uchar>(0);
     for (int i = 0; i < 256; ++i) {
         uchar b = (uchar) i;
         uchar g = (uchar) i;
         uchar r = (uchar) i;
 
         for (int tone = 0; tone < TONES; ++tone) {
-            b = cv::saturate_cast<uchar>(
-                    (float) b + (float) blue_yellow[tone] * blue_yellow_transfers[tone]->at<float>(b, 0));
-            g = cv::saturate_cast<uchar>(
-                    (float) g + (float) green_magenta[tone] * green_magenta_transfers[tone]->at<float>(g, 0));
-            r = cv::saturate_cast<uchar>(
-                    (float) r + (float) red_cyan[tone] * red_cyan_transfers[tone]->at<float>(r, 0));
+            b = cv::saturate_cast<uchar>(float(b) + float(blue_yellow[tone]) * p_blue_yellow_luts[tone][b]);
+            g = cv::saturate_cast<uchar>(float(g) + float(green_magenta[tone])* p_green_magenta_luts[tone][g]);
+            r = cv::saturate_cast<uchar>(float(r) + float(red_cyan[tone]) * p_red_cyan_luts[tone][r]);
         }
 
-        _lut.at<cv::Vec3b>(i, 0) = cv::Vec3b{b, g, r};
+        *p_lut++ = b;
+        *p_lut++ = g;
+        *p_lut++ = r;
     }
 }
 

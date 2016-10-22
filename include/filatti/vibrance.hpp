@@ -15,7 +15,7 @@ namespace filatti {
         virtual bool has_effect() const noexcept override;
 
     public:
-        static constexpr float VIBRANCE_MAX = 3;
+        static constexpr float VIBRANCE_MAX = 5;
         static constexpr float VIBRANCE_MIN = -2;
         static constexpr float VIBRANCE_NONE = 0;
 
