@@ -8,20 +8,25 @@
 
 using namespace filatti;
 
-inline interpolator::Interpolator* new_interpolator(const std::pair<std::vector<uchar>, std::vector<uchar>>& points) {
+using InterpolatorType = float;
+
+inline interpolator::Interpolator<InterpolatorType>*
+new_interpolator(const std::pair<std::vector<uchar>, std::vector<uchar>>& points) {
     if (points.first.size() > 2) {
-        return new interpolator::Spline(std::vector<double>(points.first.begin(), points.first.end()),
-                                        std::vector<double>(points.second.begin(), points.second.end()));
+        return new interpolator::Spline<InterpolatorType>(
+                std::vector<InterpolatorType>(points.first.begin(), points.first.end()),
+                std::vector<InterpolatorType>(points.second.begin(), points.second.end()));
     } else {
-        return new interpolator::Linear(std::vector<double>(points.first.begin(), points.first.end()),
-                                        std::vector<double>(points.second.begin(), points.second.end()));
+        return new interpolator::Linear<InterpolatorType>(
+                std::vector<InterpolatorType>(points.first.begin(), points.first.end()),
+                std::vector<InterpolatorType>(points.second.begin(), points.second.end()));
     }
 }
 
 inline std::vector<uchar> get_curves(const std::pair<std::vector<uchar>, std::vector<uchar>>& points) {
-    std::unique_ptr<interpolator::Interpolator> interpolator(new_interpolator(points));
+    std::unique_ptr<interpolator::Interpolator<InterpolatorType>> interpolator(new_interpolator(points));
     std::vector<uchar> curves(256);
-    for (int i = 0; i < 256; ++i) {
+    for (int i = 0, j = (int) curves.size(); i < j; ++i) {
         curves[i] = cv::saturate_cast<uchar>((*interpolator)[i]);
     }
     return curves;
@@ -133,19 +138,19 @@ bool Curves::apply(const cv::Mat& src, cv::Mat& dst) {
 
 void Curves::build_lut() {
     if (_lut.empty()) {
-        _lut.create(256, 1, CV_8UC3);
-        PRECONDITION(_lut.isContinuous(), "LUT is not continuous");
+        create_lut(_lut, CV_8UC3);
     }
 
-    std::unique_ptr<interpolator::Interpolator> value_interpolator(new_interpolator(_value_points));
-    std::unique_ptr<interpolator::Interpolator> blue_interpolator(new_interpolator(_blue_points));
-    std::unique_ptr<interpolator::Interpolator> green_interpolator(new_interpolator(_green_points));
-    std::unique_ptr<interpolator::Interpolator> red_interpolator(new_interpolator(_red_points));
+    std::unique_ptr<interpolator::Interpolator<InterpolatorType>> value_interpolator(new_interpolator(_value_points));
+    std::unique_ptr<interpolator::Interpolator<InterpolatorType>> blue_interpolator(new_interpolator(_blue_points));
+    std::unique_ptr<interpolator::Interpolator<InterpolatorType>> green_interpolator(new_interpolator(_green_points));
+    std::unique_ptr<interpolator::Interpolator<InterpolatorType>> red_interpolator(new_interpolator(_red_points));
 
-    for (int i = 0; i < 256; ++i) {
-        double value = (*value_interpolator)[i];
-        _lut.at<cv::Vec3b>(i, 0) = cv::Vec3b{cv::saturate_cast<uchar>((*blue_interpolator)[value]),
-                                             cv::saturate_cast<uchar>((*green_interpolator)[value]),
-                                             cv::saturate_cast<uchar>((*red_interpolator)[value])};
+    uchar* p_lut = _lut.ptr<uchar>(0);
+    for (int i = 0, j = _lut.rows; i < j; ++i) {
+        auto value = (*value_interpolator)[i];
+        *p_lut++ = cv::saturate_cast<uchar>((*blue_interpolator)[value]);
+        *p_lut++ = cv::saturate_cast<uchar>((*green_interpolator)[value]);
+        *p_lut++ = cv::saturate_cast<uchar>((*red_interpolator)[value]);
     }
 }

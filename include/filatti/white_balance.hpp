@@ -6,34 +6,31 @@
 
 namespace filatti {
     class WhiteBalance : public Adjustment, public Synchronous {
+    public:
+        using Type = float;
+
     private:
-        double _percent;
+        Type _percent;
 
         cv::Mat _lut;
 
         void build_lut(const cv::Mat& src);
 
-        void calculate_histogram(const cv::Mat& src, cv::MatND& hist) const noexcept;
-
-        std::vector<uchar> calculate_boundary(const cv::MatND& hist,
-                                              unsigned int channel,
-                                              float threshold) const noexcept;
-
     protected:
         virtual bool has_effect() const noexcept override;
 
     public:
-        static constexpr double PERCENT_MAX = 0.1;
-        static constexpr double PERCENT_MIN = 0;
-        static constexpr double PERCENT_NONE = PERCENT_NONE;
+        static constexpr Type PERCENT_MAX = Type(0.1);
+        static constexpr Type PERCENT_MIN = Type(0);
+        static constexpr Type PERCENT_NONE = PERCENT_NONE;
 
         WhiteBalance();
 
         ~WhiteBalance();
 
-        double get_percent() const noexcept;
+        Type get_percent() const noexcept;
 
-        void set_percent(double percent);
+        void set_percent(Type percent);
 
         virtual bool apply(const cv::Mat& src, cv::Mat& dst) override;
     };

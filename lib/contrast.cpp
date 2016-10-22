@@ -13,11 +13,11 @@ bool Contrast::has_effect() const noexcept {
     return _contrast != CONTRAST_NONE;
 }
 
-double Contrast::get_contrast() const noexcept {
+Contrast::Type Contrast::get_contrast() const noexcept {
     return _contrast;
 }
 
-void Contrast::set_contrast(double contrast) {
+void Contrast::set_contrast(Type contrast) {
     PRECONDITION(contrast >= CONTRAST_MIN && contrast <= CONTRAST_MAX, "Contrast is out of range");
     synchronize([=] {
         _contrast = contrast;
@@ -35,7 +35,7 @@ bool Contrast::apply(const cv::Mat& src, cv::Mat& dst) {
             }
         });
 
-        cv::Mat lut(256, 1, CV_8UC3);
+        cv::Mat lut(_lut.size(), CV_8UC3);
         cv::mixChannels(_lut, lut, std::vector<int>{0, 0, 0, 1, 0, 2});
         cv::LUT(src, lut, dst);
         return true;
@@ -44,11 +44,11 @@ bool Contrast::apply(const cv::Mat& src, cv::Mat& dst) {
 
 void Contrast::build_lut() {
     if (_lut.empty()) {
-        _lut.create(256, 1, CV_8UC1);
-        PRECONDITION(_lut.isContinuous(), "LUT is not continuous");
+        create_lut(_lut, CV_8UC1);
     }
 
-    for (int i = 0; i < 256; ++i) {
-        _lut.at<uchar>(i, 0) = cv::saturate_cast<uchar>((i - 127) * _contrast + 127.0);
+    uchar* p_lut = _lut.ptr<uchar>(0);
+    for (int i = 0, j = _lut.rows; i < j; ++i) {
+        p_lut[i] = cv::saturate_cast<uchar>(Type(i - 127) * _contrast + Type(127));
     }
 }

@@ -8,6 +8,9 @@
 namespace filatti {
     class ColorBalance : public Adjustment, public Dirty, public Synchronous {
     private:
+        using ToneLutType = float;
+        static constexpr int TONE_LUT_MAT_TYPE = CV_32FC1;
+
         static constexpr ToneRawType TONES = static_cast<ToneRawType>(Tone::TOTAL);
         static constexpr ToneRawType SHADOWS = static_cast<ToneRawType>(Tone::SHADOWS);
         static constexpr ToneRawType MIDTONES = static_cast<ToneRawType>(Tone::MIDTONES);

@@ -7,8 +7,11 @@
 
 namespace filatti {
     class Temperature : public Adjustment, public Dirty, public Synchronous {
+    public:
+        using Type = float;
+
     private:
-        double _temperature;
+        Type _temperature;
         cv::Mat _lut;
 
         void build_lut();
@@ -17,17 +20,17 @@ namespace filatti {
         virtual bool has_effect() const noexcept override;
 
     public:
-        static constexpr double TEMPERATURE_MIN = -0.5;
-        static constexpr double TEMPERATURE_MAX = 0.5;
-        static constexpr double TEMPERATURE_NONE = 0;
+        static constexpr Type TEMPERATURE_MIN = Type(-0.5);
+        static constexpr Type TEMPERATURE_MAX = Type(0.5);
+        static constexpr Type TEMPERATURE_NONE = Type(0);
 
         Temperature();
 
         virtual ~Temperature();
 
-        double get_temperature() const noexcept;
+        Type get_temperature() const noexcept;
 
-        void set_temperature(double temperature);
+        void set_temperature(Type temperature);
 
         virtual bool apply(const cv::Mat& src, cv::Mat& dst) override;
     };

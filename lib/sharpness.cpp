@@ -15,11 +15,11 @@ bool Sharpness::has_effect() const noexcept {
     return _sharpness != SHARPNESS_NONE;
 }
 
-double Sharpness::get_sharpness() const noexcept {
+Sharpness::Type Sharpness::get_sharpness() const noexcept {
     return _sharpness;
 }
 
-void Sharpness::set_sharpness(double sharpness) {
+void Sharpness::set_sharpness(Type sharpness) {
     PRECONDITION(sharpness >= SHARPNESS_MIN && sharpness <= SHARPNESS_MAX, "Sharpness is out of range");
     _sharpness = sharpness;
 }

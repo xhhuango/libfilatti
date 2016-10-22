@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include <opencv2/opencv.hpp>
-#include "../lib/gradient/linear.cpp"
+#include "../lib/gradient/linear.hpp"
 
 #include "test.hpp"
 
@@ -12,7 +12,7 @@ int main() {
 
     auto before = get_current_milliseconds();
 
-    filatti::gradient::Linear linear(0.1, 0.1, 0.5, .8, -60);
+    filatti::gradient::Linear<float> linear(0.1f, 0.1f, 0.5f, 0.8f, -60.f);
     linear.create(dst);
 
     auto after = get_current_milliseconds();

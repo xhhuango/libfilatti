@@ -19,12 +19,12 @@ bool HighlightShadow::has_effect() const noexcept {
     return _shadow_amount != AMOUNT_NONE || _highlight_amount != AMOUNT_NONE;
 }
 
-double HighlightShadow::get_amount(const Tone tone) const {
+HighlightShadow::Type HighlightShadow::get_amount(const Tone tone) const noexcept {
     PRECONDITION(tone == Tone::HIGHLIGHTS || tone == Tone::SHADOWS, "Tone is not supported");
     return tone == Tone::HIGHLIGHTS ? _highlight_amount : _shadow_amount;
 }
 
-void HighlightShadow::set_amount(Tone tone, double amount) {
+void HighlightShadow::set_amount(Tone tone, Type amount) {
     PRECONDITION(tone == Tone::HIGHLIGHTS || tone == Tone::SHADOWS, "Tone is not supported");
     PRECONDITION(amount >= AMOUNT_MIN && amount <= AMOUNT_MAX, "Amount is out of range");
 
@@ -38,12 +38,12 @@ void HighlightShadow::set_amount(Tone tone, double amount) {
     });
 }
 
-double HighlightShadow::get_tone_width(Tone tone) const {
+HighlightShadow::Type HighlightShadow::get_tone_width(Tone tone) const noexcept {
     PRECONDITION(tone == Tone::HIGHLIGHTS || tone == Tone::SHADOWS, "Tone is not supported");
     return tone == Tone::HIGHLIGHTS ? _highlight_tone_width : _shadow_tone_width;
 }
 
-void HighlightShadow::set_tone_width(Tone tone, double width) {
+void HighlightShadow::set_tone_width(Tone tone, Type width) {
     PRECONDITION(tone == Tone::HIGHLIGHTS || tone == Tone::SHADOWS, "Tone is not supported");
     PRECONDITION(width >= TONE_WIDTH_MIN && width <= TONE_WIDTH_MAX, "Tone width is out of range");
 
@@ -83,15 +83,15 @@ bool HighlightShadow::apply(const cv::Mat& src, cv::Mat& dst) {
 
 void HighlightShadow::build_lut() {
     if (_lut.empty()) {
-        _lut.create(256, 1, CV_8UC1);
-        PRECONDITION(_lut.isContinuous(), "LUT is not continuous");
+        create_lut(_lut, CV_8UC1);
     }
 
-    double shadow_cutoff = 255 * _shadow_tone_width;
-    double highlight_cutoff = 255 - 255 * _highlight_tone_width;
+    Type shadow_cutoff = Type(255) * _shadow_tone_width;
+    Type highlight_cutoff = Type(255) - Type(255) * _highlight_tone_width;
 
-    for (int i = 0; i < 256; ++i) {
-        double value = i;
+    uchar* p_lut = _lut.ptr<uchar>(0);
+    for (int i = 0, j = _lut.rows; i < j; ++i) {
+        Type value = i;
 
         if (value < shadow_cutoff) {
             value = (shadow_cutoff - value) * _shadow_amount + value;
@@ -99,6 +99,6 @@ void HighlightShadow::build_lut() {
             value = (value - highlight_cutoff) * _highlight_amount + value;
         }
 
-        _lut.at<uchar>(i, 0) = cv::saturate_cast<uchar>(value);
+        p_lut[i] = cv::saturate_cast<uchar>(value);
     }
 }

@@ -3,20 +3,25 @@
 
 namespace filatti {
     namespace interpolator {
+        template<typename T>
         class Element {
         protected:
-            double _x;
+            T _x;
 
         public:
-            Element(double x);
+            Element(T x) : _x(x) { }
 
             virtual ~Element() { };
 
-            virtual double eval(const double& x) const = 0;
+            virtual T eval(const T& x) const noexcept = 0;
 
-            bool operator<(const Element& e) const;
+            bool operator<(const Element<T>& e) const noexcept {
+                return _x < e._x;
+            }
 
-            bool operator<(const double& x) const;
+            bool operator<(const T& x) const noexcept {
+                return _x < x;
+            }
         };
     }
 }

@@ -12,6 +12,10 @@ namespace filatti {
         TOTAL = 3
     };
 
+    inline void create_lut(cv::Mat& lut, int type) {
+        lut.create(256, 1, type);
+    }
+
     class Adjustment {
     protected:
         virtual bool has_effect() const noexcept = 0;

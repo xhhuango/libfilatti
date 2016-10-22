@@ -7,8 +7,11 @@
 
 namespace filatti {
     class Sharpness : public Adjustment, public Rebuild, public Synchronous {
+    public:
+        using Type = float;
+
     private:
-        double _sharpness;
+        Type _sharpness;
         cv::Mat _blurred;
 
         void build_blurred(const cv::Mat& src);
@@ -17,17 +20,17 @@ namespace filatti {
         virtual bool has_effect() const noexcept override;
 
     public:
-        static constexpr double SHARPNESS_MIN = 0;
-        static constexpr double SHARPNESS_MAX = 20;
-        static constexpr double SHARPNESS_NONE = SHARPNESS_MIN;
+        static constexpr Type SHARPNESS_MIN = Type(0);
+        static constexpr Type SHARPNESS_MAX = Type(20);
+        static constexpr Type SHARPNESS_NONE = SHARPNESS_MIN;
 
         Sharpness();
 
         virtual ~Sharpness();
 
-        double get_sharpness() const noexcept;
+        Type get_sharpness() const noexcept;
 
-        void set_sharpness(double sharpness);
+        void set_sharpness(Type sharpness);
 
         void set_rebuild_blurred(bool does_rebuild_blurred) noexcept;
 

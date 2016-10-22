@@ -5,17 +5,22 @@
 
 namespace filatti {
     namespace interpolator {
+        template <typename T>
         class Interpolator {
         public:
             virtual ~Interpolator() { }
 
-            virtual double value(const double& x) const = 0;
+            virtual T value(const T& x) const noexcept = 0;
 
-            virtual std::vector<double> value(const std::vector<double>& x) const = 0;
+            virtual std::vector<T> value(const std::vector<T>& x) const noexcept = 0;
 
-            virtual double operator[](const double& x) const;
+            virtual T operator[](const T& x) const noexcept {
+                return value(x);
+            }
 
-            virtual std::vector<double> operator[](const std::vector<double>& x) const;
+            virtual std::vector<T> operator[](const std::vector<T>& x) const noexcept {
+                return value(x);
+            }
         };
     }
 }

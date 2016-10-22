@@ -7,11 +7,14 @@
 
 namespace filatti {
     class Vignette : public Adjustment, public Dirty, public Synchronous {
+    public:
+        using Type = float;
+
     private:
-        cv::Point2d _center;
-        double _radius;
-        double _strength;
-        double _feathering;
+        cv::Point_<Type> _center;
+        Type _radius;
+        Type _strength;
+        Type _feathering;
         cv::Scalar_<uchar> _color;
         bool _fit_to_image;
 
@@ -25,40 +28,40 @@ namespace filatti {
         virtual bool has_effect() const noexcept override;
 
     public:
-        static constexpr double CENTER_MIN = 0;
-        static constexpr double CENTER_MAX = 1;
+        static constexpr Type CENTER_MIN = Type(0);
+        static constexpr Type CENTER_MAX = Type(1);
 
-        static constexpr double RADIUS_MIN = 0;
-        static constexpr double RADIUS_MAX = 2;
-        static constexpr double RADIUS_NONE = RADIUS_MAX;
+        static constexpr Type RADIUS_MIN = Type(0);
+        static constexpr Type RADIUS_MAX = Type(2);
+        static constexpr Type RADIUS_NONE = RADIUS_MAX;
 
-        static constexpr double STRENGTH_MIN = 0;
-        static constexpr double STRENGTH_MAX = 1;
-        static constexpr double STRENGTH_NONE = STRENGTH_MIN;
+        static constexpr Type STRENGTH_MIN = Type(0);
+        static constexpr Type STRENGTH_MAX = Type(1);
+        static constexpr Type STRENGTH_NONE = STRENGTH_MIN;
 
-        static constexpr double FEATHERING_MIN = 0;
-        static constexpr double FEATHERING_MAX = 1;
-        static constexpr double FEATHERING_NONE = FEATHERING_MIN;
+        static constexpr Type FEATHERING_MIN = Type(0);
+        static constexpr Type FEATHERING_MAX = Type(1);
+        static constexpr Type FEATHERING_NONE = FEATHERING_MIN;
 
         Vignette();
 
         virtual ~Vignette();
 
-        cv::Point2d get_center() const noexcept;
+        cv::Point_<Type> get_center() const noexcept;
 
-        void set_center(const cv::Point2d& center);
+        void set_center(const cv::Point_<Type>& center);
 
-        double get_radius() const noexcept;
+        Type get_radius() const noexcept;
 
-        void set_radius(double radius);
+        void set_radius(Type radius);
 
-        double get_strength() const noexcept;
+        Type get_strength() const noexcept;
 
-        void set_strength(double strength);
+        void set_strength(Type strength);
 
-        double get_feathering() const noexcept;
+        Type get_feathering() const noexcept;
 
-        void set_feathering(double feathering);
+        void set_feathering(Type feathering);
 
         cv::Scalar_<uchar> get_color() const noexcept;
 
