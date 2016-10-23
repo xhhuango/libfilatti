@@ -43,3 +43,6 @@ target_link_libraries(white_balance_test filatti)
 
 add_executable(vibrance_test vibrance_test.cpp)
 target_link_libraries(vibrance_test filatti)
+
+add_executable(exposure_test exposure_test.cpp)
+target_link_libraries(exposure_test filatti)
