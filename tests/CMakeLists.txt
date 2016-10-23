@@ -46,3 +46,6 @@ target_link_libraries(vibrance_test filatti)
 
 add_executable(exposure_test exposure_test.cpp)
 target_link_libraries(exposure_test filatti)
+
+add_executable(gray_test gray_test.cpp)
+target_link_libraries(gray_test filatti)

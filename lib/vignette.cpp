@@ -1,5 +1,6 @@
 #include <filatti/vignette.hpp>
 #include <filatti/contract.hpp>
+
 #include "gradient/radial.hpp"
 
 using namespace filatti;

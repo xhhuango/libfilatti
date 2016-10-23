@@ -1,7 +1,7 @@
 #include <filatti/temperature.hpp>
 #include <filatti/contract.hpp>
 
-#include <opencv2/imgproc.hpp>
+#include <opencv2/opencv.hpp>
 
 using namespace filatti;
 
