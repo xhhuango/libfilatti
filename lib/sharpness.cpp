@@ -43,7 +43,7 @@ bool Sharpness::apply(const cv::Mat& src, cv::Mat& dst) {
                 build_blurred(src);
             }
         });
-        cv::addWeighted(src, 1 + _sharpness, _blurred, -_sharpness, 0, dst);
+        cv::addWeighted(src, Type(1) + _sharpness, _blurred, -_sharpness, 0, dst);
         return true;
     }
 }

@@ -155,6 +155,6 @@ void TiltShift::blend(const cv::Mat& src, cv::Mat& dst) const {
     cv::Mat mask_strength(src.size(), src.type());
     cv::mixChannels(_mask * _strength, mask_strength, std::vector<int>{0, 0, 0, 1, 0, 2});
 
-    dst = src.mul(cv::Scalar_<uchar>(255, 255, 255) - mask_strength, 1.0 / 255.0)
-          + _blurred.mul(mask_strength, 1.0 / 255.0);
+    dst = src.mul(cv::Scalar_<uchar>(255, 255, 255) - mask_strength, Type(1) / Type(255))
+          + _blurred.mul(mask_strength, Type(1) / Type(255));
 }

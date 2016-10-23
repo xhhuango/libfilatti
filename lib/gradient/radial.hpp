@@ -52,7 +52,7 @@ namespace filatti {
                                 T feathering, bool reserve) const {
                 T radius_width_pow2 = T(radius_width * radius_width);
                 T radius_height_pow2 = T(radius_height * radius_height);
-                T feathering_radius = 1 - feathering;
+                T feathering_radius = T(1) - feathering;
 
                 for (int row = 0, height = dst.rows; row < height; ++row) {
                     uchar* p = dst.ptr<uchar>(row);
