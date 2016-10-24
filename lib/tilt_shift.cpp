@@ -13,7 +13,7 @@ TiltShift::TiltShift() : Dirty(true),
                          Rebuild(true),
                          _center{Type(0.5), Type(0.5)},
                          _angle(ANGLE_MIN),
-                         _mask_type(MaskType::CIRCULAR),
+                         _mask_type(Mask::CIRCULAR),
                          _radius(RADIUS_NONE),
                          _strength(STRENGTH_NONE),
                          _feathering(FEATHERING_NONE) {
@@ -80,17 +80,17 @@ void TiltShift::set_angle(Type angle) {
     PRECONDITION(angle >= ANGLE_MIN && angle <= ANGLE_MAX, "Angle is out of range");
     synchronize([=] {
         _angle = angle;
-        if (_mask_type == MaskType::LINEAR) {
+        if (_mask_type == Mask::LINEAR) {
             make_dirty();
         }
     });
 }
 
-TiltShift::MaskType TiltShift::get_mask_type() const noexcept {
+TiltShift::Mask TiltShift::get_mask_type() const noexcept {
     return _mask_type;
 }
 
-void TiltShift::set_mask_type(TiltShift::MaskType mask_type) noexcept {
+void TiltShift::set_mask_type(TiltShift::Mask mask_type) noexcept {
     synchronize([=] {
         if (mask_type != _mask_type) {
             _mask_type = mask_type;
@@ -134,15 +134,15 @@ void TiltShift::create_mask(const cv::Mat& src) {
 
     gradient::Gradient* gradient_ptr;
     switch (_mask_type) {
-        case MaskType::CIRCULAR:
+        case Mask::CIRCULAR:
             gradient_ptr = new gradient::Radial<Type>(_center.x, _center.y, _radius, _feathering, false, true);
             break;
 
-        case MaskType::ELLIPTIC:
+        case Mask::ELLIPTIC:
             gradient_ptr = new gradient::Radial<Type>(_center.x, _center.y, _radius, _feathering, true, true);
             break;
 
-        case MaskType::LINEAR:
+        case Mask::LINEAR:
             gradient_ptr = new gradient::Linear<Type>(_center.x, _center.y, _radius, _feathering, _angle, true);
             break;
     }

@@ -22,7 +22,7 @@ int feathering_trackbar_value = (int) (tiltShift.get_feathering() * 100);
 int angle_trackbar_value = (int) tiltShift.get_angle();
 
 void on_trackbar(int, void*) {
-    tiltShift.set_mask_type(filatti::TiltShift::MaskType(mask_type_value));
+    tiltShift.set_mask_type(filatti::TiltShift::Mask(mask_type_value));
     tiltShift.set_strength(strength_trackbar_value / 100.0);
     tiltShift.set_radius(radius_trackbar_value / 100.0);
     tiltShift.set_feathering(feathering_trackbar_value / 100.0);

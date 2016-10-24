@@ -9,7 +9,8 @@
 namespace filatti {
     class TiltShift : public Adjustment, public Dirty, public Rebuild, public Synchronous {
     public:
-        enum class MaskType : unsigned int {
+        using MaskRawType = unsigned int;
+        enum class Mask : MaskRawType {
             CIRCULAR = 0,
             ELLIPTIC = 1,
             LINEAR = 2,
@@ -23,7 +24,7 @@ namespace filatti {
         Type _strength;
         Type _feathering;
         Type _angle;
-        MaskType _mask_type;
+        Mask _mask_type;
 
         cv::Mat _mask;
         cv::Mat _blurred;
@@ -80,11 +81,11 @@ namespace filatti {
 
         void set_angle(Type angle);
 
-        MaskType get_mask_type() const noexcept;
-
         void set_rebuild_blurred(bool does_rebuild_blurred) noexcept;
 
-        void set_mask_type(MaskType mask_type) noexcept;
+        Mask get_mask_type() const noexcept;
+
+        void set_mask_type(Mask mask_type) noexcept;
 
         virtual bool apply(const cv::Mat& src, cv::Mat& dst) override;
     };

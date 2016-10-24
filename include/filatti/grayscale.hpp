@@ -6,7 +6,8 @@
 namespace filatti {
     class Grayscale : public Adjustment {
     public:
-        enum class Mode : unsigned int {
+        using ModeRawType = unsigned int;
+        enum class Mode : ModeRawType {
             NONE = 0,
             GRAYSCALE = 1,
             BLACK_WHITE = 2,
