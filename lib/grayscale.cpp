@@ -41,7 +41,7 @@ bool Grayscale::apply(const cv::Mat& src, cv::Mat& dst) {
         cv::cvtColor(src, gray, cv::COLOR_BGR2GRAY);
 
         switch (_mode) {
-            case Mode::BLACK_WHITE:
+            case Mode::BLACK_AND_WHITE:
                 gray = gray > uchar(128);
                 break;
 
@@ -52,7 +52,7 @@ bool Grayscale::apply(const cv::Mat& src, cv::Mat& dst) {
             }
                 break;
 
-            case Mode::GRAYSCALE:
+            case Mode::GRAY:
             default:
                 break;
         }

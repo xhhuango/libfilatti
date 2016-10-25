@@ -9,8 +9,8 @@ namespace filatti {
         using ModeRawType = unsigned int;
         enum class Mode : ModeRawType {
             NONE = 0,
-            GRAYSCALE = 1,
-            BLACK_WHITE = 2,
+            GRAY = 1,
+            BLACK_AND_WHITE = 2,
             PENCIL_SKETCH = 3,
         };
 
