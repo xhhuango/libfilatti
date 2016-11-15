@@ -16,9 +16,6 @@ namespace filatti {
 
         void build_lut();
 
-    protected:
-        virtual bool has_effect() const noexcept override;
-
     public:
         static constexpr Type TEMPERATURE_MIN = Type(-0.5);
         static constexpr Type TEMPERATURE_MAX = Type(0.5);
@@ -27,6 +24,8 @@ namespace filatti {
         Temperature();
 
         virtual ~Temperature();
+
+        virtual bool has_effect() const noexcept override;
 
         Type get_temperature() const noexcept;
 

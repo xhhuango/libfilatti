@@ -21,9 +21,6 @@ namespace filatti {
 
         void build_lut();
 
-    protected:
-        virtual bool has_effect() const noexcept override;
-
     public:
         static constexpr Type AMOUNT_MAX = Type(1);
         static constexpr Type AMOUNT_MIN = Type(-1);
@@ -35,6 +32,8 @@ namespace filatti {
         HighlightShadow();
 
         virtual ~HighlightShadow();
+
+        virtual bool has_effect() const noexcept override;
 
         Type get_amount(Tone tone) const noexcept;
 

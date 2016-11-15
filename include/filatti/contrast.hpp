@@ -16,9 +16,6 @@ namespace filatti {
 
         void build_lut();
 
-    protected:
-        virtual bool has_effect() const noexcept override;
-
     public:
         static constexpr Type CONTRAST_MIN = Type(0);
         static constexpr Type CONTRAST_MAX = Type(2);
@@ -27,6 +24,8 @@ namespace filatti {
         Contrast();
 
         virtual ~Contrast();
+
+        virtual bool has_effect() const noexcept override;
 
         Type get_contrast() const noexcept;
 

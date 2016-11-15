@@ -14,9 +14,6 @@ namespace filatti {
 
         void blend(const cv::Mat& src, cv::Mat& dst) const;
 
-    protected:
-        virtual bool has_effect() const noexcept override;
-
     public:
         static constexpr Type VIBRANCE_MAX = Type(5);
         static constexpr Type VIBRANCE_MIN = Type(-2);
@@ -25,6 +22,8 @@ namespace filatti {
         Vibrance();
 
         ~Vibrance();
+
+        virtual bool has_effect() const noexcept override;
 
         Type get_vibrance() const noexcept;
 

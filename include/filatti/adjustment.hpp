@@ -17,11 +17,10 @@ namespace filatti {
     }
 
     class Adjustment {
-    protected:
-        virtual bool has_effect() const noexcept = 0;
-
     public:
         virtual ~Adjustment() { }
+
+        virtual bool has_effect() const noexcept = 0;
 
         virtual bool apply(const cv::Mat& src, cv::Mat& dst) = 0;
     };

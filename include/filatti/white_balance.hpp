@@ -16,9 +16,6 @@ namespace filatti {
 
         void build_lut(const cv::Mat& src);
 
-    protected:
-        virtual bool has_effect() const noexcept override;
-
     public:
         static constexpr Type PERCENT_MAX = Type(0.1);
         static constexpr Type PERCENT_MIN = Type(0);
@@ -26,7 +23,9 @@ namespace filatti {
 
         WhiteBalance();
 
-        ~WhiteBalance();
+        virtual ~WhiteBalance();
+
+        virtual bool has_effect() const noexcept override;
 
         Type get_percent() const noexcept;
 

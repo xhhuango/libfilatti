@@ -19,9 +19,6 @@ namespace filatti {
 
         void build_lut();
 
-    protected:
-        virtual bool has_effect() const noexcept override;
-
     public:
         static const int POINTS_SIZE_MIN = 2;
         static const int POINTS_SIZE_MAX = 256;
@@ -31,6 +28,8 @@ namespace filatti {
         Curves();
 
         virtual ~Curves();
+
+        virtual bool has_effect() const noexcept override;
 
         /**
          * Value

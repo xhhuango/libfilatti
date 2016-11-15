@@ -18,9 +18,6 @@ namespace filatti {
 
         void build_lut();
 
-    protected:
-        virtual bool has_effect() const noexcept override;
-
     public:
         static const int HUE_NONE = 0;
         static const int HUE_MIN = -180;
@@ -37,6 +34,8 @@ namespace filatti {
         Hls();
 
         virtual ~Hls();
+
+        virtual bool has_effect() const noexcept override;
 
         int get_hue() const noexcept;
 

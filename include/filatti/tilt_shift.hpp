@@ -35,9 +35,6 @@ namespace filatti {
 
         void blend(const cv::Mat& src, cv::Mat& dst) const;
 
-    protected:
-        virtual bool has_effect() const noexcept override;
-
     public:
         static constexpr Type CENTER_MIN = Type(0);
         static constexpr Type CENTER_MAX = Type(1);
@@ -60,6 +57,8 @@ namespace filatti {
         TiltShift();
 
         virtual ~TiltShift();
+
+        virtual bool has_effect() const noexcept override;
 
         cv::Point_<Type> get_center() const noexcept;
 

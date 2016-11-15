@@ -18,9 +18,6 @@ namespace filatti {
         Mode _mode;
         unsigned int _blur_kernel_size;
 
-    protected:
-        virtual bool has_effect() const noexcept override;
-
     public:
         static const unsigned int BLUR_KERNEL_SIZE_MIN = 1;
         static const unsigned int BLUR_KERNEL_SIZE_MAX = 30;
@@ -28,6 +25,8 @@ namespace filatti {
         Grayscale();
 
         virtual ~Grayscale();
+
+        virtual bool has_effect() const noexcept override;
 
         Mode get_mode() const noexcept;
 

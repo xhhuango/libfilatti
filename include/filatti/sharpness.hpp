@@ -16,9 +16,6 @@ namespace filatti {
 
         void build_blurred(const cv::Mat& src);
 
-    protected:
-        virtual bool has_effect() const noexcept override;
-
     public:
         static constexpr Type SHARPNESS_MIN = Type(0);
         static constexpr Type SHARPNESS_MAX = Type(20);
@@ -27,6 +24,8 @@ namespace filatti {
         Sharpness();
 
         virtual ~Sharpness();
+
+        virtual bool has_effect() const noexcept override;
 
         Type get_sharpness() const noexcept;
 

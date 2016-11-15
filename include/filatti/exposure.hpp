@@ -17,9 +17,6 @@ namespace filatti {
 
         void build_lut();
 
-    protected:
-        virtual bool has_effect() const noexcept override;
-
     public:
         static constexpr Type EXPOSURE_MAX = Type(5);
         static constexpr Type EXPOSURE_MIN = Type(-5);
@@ -28,6 +25,8 @@ namespace filatti {
         Exposure();
 
         virtual ~Exposure();
+
+        virtual bool has_effect() const noexcept override;
 
         Type get_exposure() const noexcept;
 

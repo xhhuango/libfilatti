@@ -36,9 +36,6 @@ namespace filatti {
 
         void build_lut();
 
-    protected:
-        virtual bool has_effect() const noexcept override;
-
     public:
         static const int VALUE_MAX = 100;
         static const int VALUE_MIN = -100;
@@ -47,6 +44,8 @@ namespace filatti {
         ColorBalance();
 
         virtual ~ColorBalance();
+
+        virtual bool has_effect() const noexcept override;
 
         int get_red_cyan(Tone tone) const noexcept;
 
